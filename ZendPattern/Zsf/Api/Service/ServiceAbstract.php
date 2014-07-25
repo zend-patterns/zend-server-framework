@@ -148,10 +148,10 @@ abstract class ServiceAbstract extends FeatureAbstract
 		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestListener,'setPostParameters'));
 		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestListener,'setFileParameters'));
 		$requestContentListener = new RequestContentListener();
-		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestContentListener,'prepareBody'), -5);
 		$headersListener = new HeadersListener();
-		$this->getEventManager()->attach(self::EVENT_REQUEST,array($headersListener,'computeHeaders'), -10);
 		$responseListener = new ResponseListener();
+		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestContentListener,'prepareBody'), -5);
+		$this->getEventManager()->attach(self::EVENT_REQUEST,array($headersListener,'computeHeaders'), -10);
 		$this->getEventManager()->attach(self::EVENT_RESPONSE,array($responseListener,'xmlResponseStrategy'));
 		$this->getEventManager()->attach(self::EVENT_RESPONSE,array($responseListener,'fileResponseStrategy'));
 		$event = $this->getEvent();
@@ -159,9 +159,6 @@ abstract class ServiceAbstract extends FeatureAbstract
 		$event->setName(self::EVENT_REQUEST);
 		$this->getEventManager()->trigger($event);
 		$request = $this->getEvent()->getRequest();
-		
-		//var_dump($request->toString());
-		
 		$client = $this->getHttpClient();
 		$client->setRequest($request);
 		$response = $client->send();
