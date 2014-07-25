@@ -3,7 +3,6 @@ namespace ZendPattern\Zsf\Api\Service;
 
 use ZendPattern\Zsf\Feature\FeatureAbstract;
 use ZendPattern\Zsf\Api\Client\ApiClientInterface;
-use ZendPattern\Zsf\Api\Client\ApiClient;
 use ZendPattern\Zsf\Api\Key\Key;
 use ZendPattern\Zsf\Exception\Exception;
 use ZendPattern\Zsf\Api\ApiParameter;
@@ -11,6 +10,9 @@ use Zend\EventManager\EventManager;
 use Zend\EventManager\Event;
 use ZendPattern\Zsf\Api\Service\Listener\PrepareRequestListener;
 use ZendPattern\Zsf\Api\Service\Listener\ResponseListener;
+use Zend\Http\Client;
+use ZendPattern\Zsf\Api\Service\Listener\RequestContentListener;
+use ZendPattern\Zsf\Api\Service\Listener\HeadersListener;
 
 /**
  * Abstract class for all Zend Server web API services.
@@ -144,6 +146,11 @@ abstract class ServiceAbstract extends FeatureAbstract
 		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestListener,'createRequest'),10);
 		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestListener,'setGetParameters'));
 		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestListener,'setPostParameters'));
+		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestListener,'setFileParameters'));
+		$requestContentListener = new RequestContentListener();
+		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestContentListener,'prepareBody'), -5);
+		$headersListener = new HeadersListener();
+		$this->getEventManager()->attach(self::EVENT_REQUEST,array($headersListener,'computeHeaders'), -10);
 		$responseListener = new ResponseListener();
 		$this->getEventManager()->attach(self::EVENT_RESPONSE,array($responseListener,'xmlResponseStrategy'));
 		$this->getEventManager()->attach(self::EVENT_RESPONSE,array($responseListener,'fileResponseStrategy'));
@@ -152,6 +159,9 @@ abstract class ServiceAbstract extends FeatureAbstract
 		$event->setName(self::EVENT_REQUEST);
 		$this->getEventManager()->trigger($event);
 		$request = $this->getEvent()->getRequest();
+		
+		//var_dump($request->toString());
+		
 		$client = $this->getHttpClient();
 		$client->setRequest($request);
 		$response = $client->send();
@@ -177,10 +187,10 @@ abstract class ServiceAbstract extends FeatureAbstract
 	 * 
 	 * @return ApiClientInterface
 	 */
-	protected function getHttpClient()
+	public function getHttpClient()
 	{
 		if ($this->httpClient) return $this->httpClient;
-		$this->httpClient = new ApiClient();
+		$this->httpClient = new Client();
 		return $this->httpClient;
 	}
 	

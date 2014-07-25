@@ -29,6 +29,13 @@ class ApiServiceEvent extends Event
 	protected $response;
 	
 	/**
+	 * Boundary string used in multipart form-data encoded request
+	 * 
+	 * @var string
+	 */
+	protected $multiPartBoundary;
+	
+	/**
 	 * @return the $service
 	 */
 	public function getService() {
@@ -68,5 +75,19 @@ class ApiServiceEvent extends Event
 	 */
 	public function setResponse($response) {
 		$this->response = $response;
+	}
+	
+	/**
+	 * @return the $multiPartBoundary
+	 */
+	public function getMultiPartBoundary() {
+		return $this->multiPartBoundary;
+	}
+
+	/**
+	 * @param string $multiPartBoundary
+	 */
+	public function setMultiPartBoundary($multiPartBoundary) {
+		$this->multiPartBoundary = $multiPartBoundary;
 	}
 }

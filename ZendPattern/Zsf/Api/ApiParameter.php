@@ -6,6 +6,8 @@ class ApiParameter
 	const TYPE_STRING = 'string';
 	const TYPE_ARRAY = 'array';
 	const TYPE_INTEGER = 'integer';
+	const TYPE_FILE = 'file';
+	const TYPE_BOOLEAN = 'boolean';
 	
 	/**
 	 * Parameter tyep
@@ -74,7 +76,6 @@ class ApiParameter
 	 * @param \ZendPattern\ZSWebAPI2\ApiService\mixed $value
 	 */
 	public function setValue($value) {
-		//@todo : you should check parameter value !!!
 		$this->value = $value;
 	}
 	
@@ -110,4 +111,14 @@ class ApiParameter
 		if ($this->type == self::TYPE_ARRAY) return true;
 		return false;
 	}
-}
+	
+	/**
+	 * Check if parameter is file or not
+	 * 
+	 * @return boolean
+	 */
+	public function isFile()
+	{
+		if ($this->type == self::TYPE_FILE) return true;
+		return false;
+	}}

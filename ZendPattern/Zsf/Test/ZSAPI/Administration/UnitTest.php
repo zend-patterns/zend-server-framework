@@ -4,6 +4,7 @@ namespace Test\ZSAPI\Administration;
 use ZendPattern\Zsf\Server\ZendServer6;
 use ZendPattern\Zsf\Server\WebInterface;
 use ZendPattern\Zsf\Api\Key\Key;
+use ZendPattern\Zsf\Api\Service\ZendServer\Deployment\ApplicationDeploy;
 
 class UnitTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,6 +36,19 @@ class UnitTest extends \PHPUnit_Framework_TestCase
 	public function ApiKeyGetList()
 	{
 		$response = $this->zendServer->apiKeysGetList();
+	}
+	
+	/**
+	 * @test
+	 */
+	public function ApplicationDeploy()
+	{
+		$this->zendServer->addFeature(new ApplicationDeploy());
+		$response = $this->zendServer->applicationDeploy(array(
+			'appPackage' => TESTDIR . '/data/phpMyAdmin-4.0.5.4.zpk',
+			'baseUrl' => 'http://www.phpmyadmin.dev',
+			'defaultServer' => true,
+		));
 		var_dump($response->getInnerResponse()->getBody());
 	}
 }

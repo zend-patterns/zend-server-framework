@@ -50,7 +50,7 @@ class PrepareRequestListener
 	}
 	
 	/**
-	 * Set POST parameter
+	 * Set POST parameters
 	 *
 	 * @param ApiServiceEvent
 	 */
@@ -58,7 +58,7 @@ class PrepareRequestListener
 	{
 		$parameters = $event->getService()->getParameters();
 		$request = $event->getRequest();
-		if ( ! $request->isPost() ||count($parameters) == 0) return;
+		if ( ! $request->isPost() || count($parameters) == 0) return;
 		$post = new Parameters();
 		foreach ($parameters as $name => $param){
 			if ($param->isScalar()){
@@ -66,6 +66,31 @@ class PrepareRequestListener
 			}
 		}
 		$request->setPost($post);
+		$event->setRequest($request);
+	}
+	
+	/**
+	 * Set File parameters
+	 *
+	 * @param ApiServiceEvent
+	 */
+	public function setFileParameters(ApiServiceEvent $event)
+	{
+		$parameters = $event->getService()->getParameters();
+		$request = $event->getRequest();
+		if ( ! $request->isPost() || count($parameters) == 0) return;
+		$files = new Parameters();
+		foreach ($parameters as $name => $param){
+			if ( ! $param->isFile()) continue;
+			$file = array(
+				'ctype' => 'application/zip',
+				'data' => file_get_contents($param->getValue()),
+				'filename' => $param->getValue(),
+				'formname' => $name,
+			);
+			$files->set($name,$file);
+		}
+		$request->setFiles($files);
 		$event->setRequest($request);
 	}
 }
