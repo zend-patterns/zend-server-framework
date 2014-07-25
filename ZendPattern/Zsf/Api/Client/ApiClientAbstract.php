@@ -2,8 +2,9 @@
 namespace ZendPattern\Zsf\Api\Client;
 
 use Zend\Http\Client;
-use ZendPattern\ZSWebAPI2\Api\ApiRequest;
+use ZendPattern\Zsf\Api\ApiRequest;
 use Zend\Http\Headers;
+use Zend\Http\Request;
 
 abstract class ApiClientAbstract extends Client
 {
@@ -13,7 +14,7 @@ abstract class ApiClientAbstract extends Client
 	 * (non-PHPdoc)
 	 * @see \Zend\Http\Client::send()
 	 */
-	public function send(ApiRequest $request = null)
+	public function send(Request $request = null)
 	{
 		if ($request !== null) {
 			$this->setRequest($request);

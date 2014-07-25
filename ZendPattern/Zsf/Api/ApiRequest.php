@@ -2,7 +2,7 @@
 namespace ZendPattern\Zsf\Api;
 
 use Zend\Http\Request;
-use ZendPattern\ZSWebAPI2\Api\Key\Key;
+use ZendPattern\Zsf\Api\Key\Key;
 
 class ApiRequest extends Request
 {

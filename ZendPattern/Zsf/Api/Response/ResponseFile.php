@@ -29,7 +29,7 @@ class ResponseFile extends ResponseAbstract
 	 */
 	public function getFileName() {
 		if ($this->fileName) return $this->fileName;
-		$contentDisposition = $this->getHeaders()->get('Content-Disposition')->getFieldValue();
+		$contentDisposition = $this->getInnerResponse()->getHeaders()->get('Content-Disposition')->getFieldValue();
 		preg_match('@filename="(.*)"@',$contentDisposition,$tmp);
 		$this->fileName = $tmp[1];
 		return $this->fileName;
@@ -40,7 +40,7 @@ class ResponseFile extends ResponseAbstract
 	 */
 	public function getFileContent() {
 		if ($this->fileContent) return $this->fileContent;
-		$this->fileContent = $this->getContent();
+		$this->fileContent = $this->getInnerResponse()->getContent();
 		return $this->fileContent;
 	}
 
@@ -49,7 +49,7 @@ class ResponseFile extends ResponseAbstract
 	 */
 	public function getContentType() {
 		if ($this->contentType) return $this->contentType;
-		$this->contentType = $this->getHeaders()->get('Content-Type')->getFieldValue();
+		$this->contentType = $this->getInnerResponse()->getHeaders()->get('Content-Type')->getFieldValue();
 		return $this->contentType;
 	}
 

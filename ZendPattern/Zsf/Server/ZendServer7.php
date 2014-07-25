@@ -7,7 +7,7 @@ use ZendPattern\Zsf\Api\Key\KeyManager;
 use ZendPattern\Zsf\Api\Service\ZendServer\Server\GetSystemInfo;
 use ZendPattern\Zsf\Feature\ZendServer6\AutoDiscover;
 
-class ZendServer6 extends ServerAbstract
+class ZendServer7 extends ServerAbstract
 {
 	const EDITION_FREE = 'free';
 	const EDITION_SMB = 'smb';
@@ -21,7 +21,7 @@ class ZendServer6 extends ServerAbstract
 	 * @param string $rootUri
 	 * @param string $apiPath
 	 */
-	public function __construct($version = '6.0.0' ,$edition = self::EDITION_SMB,$rootUri = WebInterface::DEFAULT_HOST,$apiPath = WebInterface::DEFAULT_API_PATH)
+	public function __construct($version = '7.0.0' ,$edition = self::EDITION_SMB,$rootUri = WebInterface::DEFAULT_HOST,$apiPath = WebInterface::DEFAULT_API_PATH)
 	{
 		$this->setVersion($version);
 		$this->setEdition($edition);
@@ -44,7 +44,7 @@ class ZendServer6 extends ServerAbstract
 	}
 	
 	/**
-	 * Initiate Zend Server 6 minimal features
+	 * Initiate Zend Server 7 minimal features
 	 */
 	protected function init()
 	{

@@ -18,7 +18,7 @@ class ResponseXml extends ResponseAbstract
 	public function getXmlContent()
 	{
 		if ($this->xml !== null) return $this->xml;
-		$this->xml = simplexml_load_string($this->getBody());
+		$this->xml = simplexml_load_string($this->innerResponse->getBody());
 		return $this->xml;
 	}
 	

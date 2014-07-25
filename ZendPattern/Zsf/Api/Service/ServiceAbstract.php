@@ -2,23 +2,30 @@
 namespace ZendPattern\Zsf\Api\Service;
 
 use ZendPattern\Zsf\Feature\FeatureAbstract;
-use ZendPattern\Zsf\Api\ApiRequest;
 use ZendPattern\Zsf\Api\Client\ApiClientInterface;
 use ZendPattern\Zsf\Api\Client\ApiClient;
 use ZendPattern\Zsf\Api\Key\Key;
 use ZendPattern\Zsf\Exception\Exception;
-use ZendPattern\Zsf\Api\Response\ResponseApi;
 use ZendPattern\Zsf\Api\ApiParameter;
-use Zend\Stdlib\Parameters;
-use ZendPattern\Zsf\Api\Response\ResponseAbstract;
-use ZendPattern\Zsf\Api\Response\ResponseXml;
+use Zend\EventManager\EventManager;
+use Zend\EventManager\Event;
+use ZendPattern\Zsf\Api\Service\Listener\PrepareRequestListener;
+use ZendPattern\Zsf\Api\Service\Listener\ResponseListener;
 
+/**
+ * Abstract class for all Zend Server web API services.
+ * Service abstract inherit from Zend Server feature.
+ * @author sophpie
+ */
 abstract class ServiceAbstract extends FeatureAbstract
 {
 	const HTTP_METHOD_GET = 'GET';
 	const HTTP_METHOD_POST = 'POST';
 	
 	const PERMISSION_READ = 'read';
+	
+	const EVENT_REQUEST = 'request';
+	const EVENT_RESPONSE = 'response';
 	
 	/**
 	 * HTTP method GET | POST
@@ -63,12 +70,52 @@ abstract class ServiceAbstract extends FeatureAbstract
 	protected $apiKeyName = 'admin';
 	
 	/**
-	 * Response prototype
+	 * Event manager
 	 * 
-	 * @var ResponseAbstract
+	 * @var EventManager
 	 */
-	protected $responsePrototype;
+	protected $eventManager;
+	
+	/**
+	 * Event
+	 * @var Event
+	 */
+	protected $event;
 
+	/**
+	 * @return the $event
+	 */
+	public function getEvent() {
+		if ( ! $this->event){
+			$this->event = new ApiServiceEvent();
+		}
+		return $this->event;
+	}
+
+	/**
+	 * @param \Zend\EventManager\Event $event
+	 */
+	public function setEvent($event) {
+		$this->event = $event;
+	}
+
+	/**
+	 * @return the $eventManager
+	 */
+	public function getEventManager() {
+		if ( ! $this->eventManager) {
+			$this->eventManager = new EventManager();
+		}
+		return $this->eventManager;
+	}
+
+	/**
+	 * @param \Zend\EventManager\EventManager $eventManager
+	 */
+	public function setEventManager($eventManager) {
+		$this->eventManager = $eventManager;
+	}
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see \ZendPattern\ZSWebAPI2\Feature\FeatureAbstract::getResourceId()
@@ -93,98 +140,27 @@ abstract class ServiceAbstract extends FeatureAbstract
 		if (isset($args[1])) $this->setApiKeyName($args[1]);
 		if (isset($args[2])) $this->setHttpClient($args[2]);
 		if (isset($args[0])) $this->setParameters($args[0]);
-		$request = new ApiRequest();
-		$request->setServer($this->server);
-		$request->setMethod($this->httpMethod);
-		$request->setApiKeyName($this->apiKeyName);
-		$apiUri = $this->server->getWebInterface()->getApiUri();
-		$request->setUri($apiUri);
-		$path = $request->getUri()->getPath();
-		$path .= '/' . trim($this->uriPath,'/');
-		$request->getUri()->setPath($path);
-		$this->setGetParameters($request);
-		$this->setPostParameters($request);
-		$response = $this->getResponsePrototype();
+		$requestListener = new PrepareRequestListener();
+		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestListener,'createRequest'),10);
+		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestListener,'setGetParameters'));
+		$this->getEventManager()->attach(self::EVENT_REQUEST,array($requestListener,'setPostParameters'));
+		$responseListener = new ResponseListener();
+		$this->getEventManager()->attach(self::EVENT_RESPONSE,array($responseListener,'xmlResponseStrategy'));
+		$this->getEventManager()->attach(self::EVENT_RESPONSE,array($responseListener,'fileResponseStrategy'));
+		$event = $this->getEvent();
+		$event->setService($this);
+		$event->setName(self::EVENT_REQUEST);
+		$this->getEventManager()->trigger($event);
+		$request = $this->getEvent()->getRequest();
 		$client = $this->getHttpClient();
-		$client->setResponse($response);
 		$client->setRequest($request);
 		$response = $client->send();
-		$responseStrategies = array('xml','file');
-		foreach ($responseStrategies as $prefix){
-			$strategie = $prefix . 'ResponseStrategy';
-			$result = $this->$strategie($response);
-			if ($result) return $result;
-		}
-		throw new Exception('Cannot manage API response');
-	}
-	
-	/**
-	 * Manage Xml api response
-	 * 
-	 * @param ResponseApi $response
-	 * @throws Exception
-	 * @return void|unknown
-	 */
-	protected function xmlResponseStrategy($response)
-	{
-		$contentType = $response->getHeaders()->get('Content-Type')->getFieldValue();
-		if (preg_match('@^application/vnd\.zend\.serverapi\+xml@', $contentType) != 1) return;
-		if ( ! $response->isSuccess()){
-			$message  = ' - Error: ' . $response->getApiErrorCode();
-			$message .= ' - Reason: ' . $response->getApiErrorMessage();
-			$message .= ' - ' . $response->getBody();
-			throw new Exception($message);
-		}
+		$event->setName(self::EVENT_RESPONSE);
+		$event->setResponse($response);
+		$this->getEventManager()->trigger($event,function($e){return $e;});
+		$response = $this->getEvent()->getResponse();
 		return $response;
 	}
-	
-	/**
-	 * Manage file api response
-	 * 
-	 * @param reposneApi $response
-	 */
-	protected function fileResponseStrategy($response)
-	{
-		$contentType = $response->getHeaders()->get('Content-Type')->getFieldValue();
-		if ($contentType == 'application/zip') return $response;
-		if ($contentType == 'application/x-amf') return $response;
-		if ($contentType == 'application/vnd.zend.serverconfig') return $response;
-	}
-	
-	/**
-	 * Set GET query parameters
-	 * 
-	 * @param ApiRequest
-	 */
-	protected function setGetParameters(ApiRequest $request)
-	{
-		if ( ! $request->isGet() || count($this->parameters) == 0) return;
-		$query = new Parameters();
-		foreach ($this->parameters as $name => $param){
-			if ($param->isScalar()){
-				if ($param->getValue() === null) continue;
-				$query->set($name, $param->getValue());
-			}
-		}
-		$request->setQuery($query);
-	}
-	
-	/**
-	 * Set POST parameter
-	 * 
-	 * @param ApiRequest
-	 */
-	protected function setPostParameters(ApiRequest $request)
-	{
-		if ( ! $request->isPost() ||count($this->parameters) == 0) return;
-		$post = new Parameters();
-		foreach ($this->parameters as $name => $param){
-			if ($param->isScalar()){
-				$post->set($name, $param->getValue());
-			}
-		}
-		$request->setPost($post);
-	} 
 	
 	/**
 	 * Set custom Api Client
@@ -223,7 +199,7 @@ abstract class ServiceAbstract extends FeatureAbstract
 	 * 
 	 * @return Key
 	 */
-	protected function getApiKeyName()
+	public function getApiKeyName()
 	{
 		return $this->apiKeyName;
 	}
@@ -256,19 +232,36 @@ abstract class ServiceAbstract extends FeatureAbstract
 	}
 	
 	/**
-	 * @return the $responsePrototype
+	 * @return the $uriPath
 	 */
-	public function getResponsePrototype() {
-		if ($this->responsePrototype) return $this->responsePrototype;
-		$this->responsePrototype = new ResponseXml();
-		return $this->responsePrototype;
+	public function getUriPath() {
+		return $this->uriPath;
 	}
 
 	/**
-	 * @param \ZendPattern\Zsf\Api\Response\ResponseAbstract $responsePrototype
+	 * @param string $uriPath
 	 */
-	public function setResponsePrototype($responsePrototype) {
-		$this->responsePrototype = $responsePrototype;
+	public function setUriPath($uriPath) {
+		$this->uriPath = $uriPath;
+	}
+	/**
+	 * @return the $parameters
+	 */
+	public function getParameters() {
+		return $this->parameters;
+	}
+	
+	/**
+	 * @return the $httpMethod
+	 */
+	public function getHttpMethod() {
+		return $this->httpMethod;
 	}
 
+	/**
+	 * @param string $httpMethod
+	 */
+	public function setHttpMethod($httpMethod) {
+		$this->httpMethod = $httpMethod;
+	}
 }

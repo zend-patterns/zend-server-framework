@@ -3,10 +3,39 @@ namespace ZendPattern\Zsf\Api\Response;
 
 use Zend\Http\Response;
 
-abstract class ResponseAbstract extends Response
+abstract class ResponseAbstract
 {
-	const TYPE_XML = 'xml';
-	const TYPE_FILE = 'file';
+	/**
+	 * Raw Http reponse 
+	 * 
+	 * @var Response
+	 */
+	protected $innerResponse;
 	
-	protected $type;
+	/**
+	 * Response factory from plain htt response
+	 *
+	 * @param Response $response
+	 */
+	public static function factory(Response $response)
+	{
+		$newResponse = new static();
+		$newResponse->setInnerResponse($response);
+		return $newResponse;
+	}
+	
+	/**
+	 * @return the $innerResponse
+	 */
+	public function getInnerResponse() {
+		return $this->innerResponse;
+	}
+
+	/**
+	 * @param \Zend\Http\Response $innerResponse
+	 */
+	public function setInnerResponse($innerResponse) {
+		$this->innerResponse = $innerResponse;
+	}
+
 }
