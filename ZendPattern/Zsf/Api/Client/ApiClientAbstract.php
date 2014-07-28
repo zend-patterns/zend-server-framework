@@ -1,20 +1,18 @@
 <?php
 namespace ZendPattern\Zsf\Api\Client;
 
-use Zend\Http\Client;
-use Zend\Http\Request;
-
-abstract class ApiClientAbstract extends Client
+use ZendPattern\Zsf\Api\ApiRequest;
+abstract class ApiClientAbstract
 {
 	/**
-	 * (non-PHPdoc)
-	 * @see \Zend\Http\Client::send()
+	 * Send Api request to a server service
+	 * 
+	 * @param $request ApiRequest
+	 * @return ApiResponseAbstract
+	 * 
 	 */
-	public function send(Request $request = null)
+	public function send(ApiRequest $request)
 	{
-		if ($request !== null) {
-			$this->setRequest($request);
-		}
-		return parent::send($request);
+		
 	}
 }

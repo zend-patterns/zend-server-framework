@@ -1,8 +1,8 @@
 <?php
-namespace ZendPattern\Zsf\Api\Service\Listener;
+namespace ZendPattern\Zsf\Api\Listener;
 
 use ZendPattern\Zsf\Api\ApiRequest;
-use ZendPattern\Zsf\Api\Service\ApiServiceEvent;
+use ZendPattern\Zsf\Api\ApiCallEvent;
 use Zend\Stdlib\Parameters;
 
 class PrepareRequestListener
@@ -12,14 +12,14 @@ class PrepareRequestListener
 	 * 
 	 * @param ApiServiceEvent $event
 	 */
-	public function createRequest(ApiServiceEvent $event)
+	public function createRequest(ApiCallEvent $event)
 	{
-		$server = $event->getService()->getServer();
-		$uriPath = $event->getService()->getUriPath();
+		$server = $event->getApiCall()->getServer();
+		$uriPath = $event->getApiService()->getUriPath();
 		$request = new ApiRequest();
 		$request->setServer($server);
-		$request->setMethod($event->getService()->getHttpMethod());
-		$request->setApiKeyName($event->getService()->getApiKeyName());
+		$request->setMethod($event->getApiService()->getHttpMethod());
+		$request->setApiKeyName($event->getApiCall()->getApiKeyName());
 		$apiUri = $server->getWebInterface()->getApiUri();
 		$request->setUri($apiUri);
 		$path = $request->getUri()->getPath();
@@ -33,9 +33,9 @@ class PrepareRequestListener
 	 *
 	 * @param ApiServiceEvent
 	 */
-	public function setGetParameters(ApiServiceEvent $event)
+	public function setGetParameters(ApiCallEvent $event)
 	{
-		$parameters = $event->getService()->getParameters();
+		$parameters = $event->getApiCall()->getParameters();
 		$request = $event->getRequest();
 		if ( ! $request->isGet() || count($parameters) == 0) return;
 		$query = new Parameters();
@@ -54,9 +54,9 @@ class PrepareRequestListener
 	 *
 	 * @param ApiServiceEvent
 	 */
-	public function setPostParameters(ApiServiceEvent $event)
+	public function setPostParameters(ApiCallEvent $event)
 	{
-		$parameters = $event->getService()->getParameters();
+		$parameters = $event->getApiCall()->getParameters();
 		$request = $event->getRequest();
 		if ( ! $request->isPost() || count($parameters) == 0) return;
 		$post = new Parameters();
@@ -74,9 +74,9 @@ class PrepareRequestListener
 	 *
 	 * @param ApiServiceEvent
 	 */
-	public function setFileParameters(ApiServiceEvent $event)
+	public function setFileParameters(ApiCallEvent $event)
 	{
-		$parameters = $event->getService()->getParameters();
+		$parameters = $event->getApiCall()->getParameters();
 		$request = $event->getRequest();
 		if ( ! $request->isPost() || count($parameters) == 0) return;
 		$files = new Parameters();

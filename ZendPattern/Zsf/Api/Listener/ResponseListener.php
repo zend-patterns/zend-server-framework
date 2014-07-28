@@ -1,7 +1,7 @@
 <?php
-namespace ZendPattern\Zsf\Api\Service\Listener;
+namespace ZendPattern\Zsf\Api\Listener;
 
-use ZendPattern\Zsf\Api\Service\ApiServiceEvent;
+use ZendPattern\Zsf\Api\ApiCallEvent;
 use ZendPattern\Zsf\Api\Response\ResponseXml;
 use ZendPattern\Zsf\Exception\Exception;
 use ZendPattern\Zsf\Api\Response\ResponseFile;
@@ -15,7 +15,7 @@ class ResponseListener
 	 * @throws Exception
 	 * @return boolean
 	 */
-	public function xmlResponseStrategy(ApiServiceEvent $event)
+	public function xmlResponseStrategy(ApiCallEvent $event)
 	{
 		$response = $event->getResponse();
 		$contentType = $response->getHeaders()->get('Content-Type')->getFieldValue();
@@ -36,7 +36,7 @@ class ResponseListener
 	 *
 	 * @param ApiServiceEvent
 	 */
-	public function fileResponseStrategy(ApiServiceEvent $event)
+	public function fileResponseStrategy(ApiCallEvent $event)
 	{
 		$response = $event->getResponse();
 		$contentType = $response->getHeaders()->get('Content-Type')->getFieldValue();

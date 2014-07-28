@@ -5,6 +5,7 @@ use ZendPattern\Zsf\Server\ZendServer6;
 use ZendPattern\Zsf\Server\WebInterface;
 use ZendPattern\Zsf\Api\Key\Key;
 use ZendPattern\Zsf\Api\Service\ZendServer\Deployment\ApplicationDeploy;
+use ZendPattern\Zsf\Api\ApiCall;
 
 class UnitTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,6 +25,7 @@ class UnitTest extends \PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 		$this->zendServer = new ZendServer6();
+		$this->zendServer->addFeature(new ApiCall());
 		$webInterface = new WebInterface(self::$ZSconfig['rootUri']);
 		$this->zendServer->setWebInterface($webInterface);
 		$apiKey = new Key(self::$ZSconfig['keyName'], self::$ZSconfig['keyHash']);
@@ -35,7 +37,8 @@ class UnitTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function ApiKeyGetList()
 	{
-		$response = $this->zendServer->apiKeysGetList();
+		$response = $this->zendServer->apiCall('apiKeysGetList');
+		//var_dump($response->getInnerResponse()->getBody());
 	}
 	
 	/**
@@ -43,12 +46,14 @@ class UnitTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function ApplicationDeploy()
 	{
-		$this->zendServer->addFeature(new ApplicationDeploy());
-		$response = $this->zendServer->applicationDeploy(array(
-			'appPackage' => TESTDIR . '/data/phpMyAdmin-4.0.5.4.zpk',
-			'baseUrl' => 'http://www.phpmyadmin.dev',
-			'defaultServer' => true,
-		));
+		$response = $this->zendServer->apiCall(
+			'applicationDeploy',
+			array(
+				'appPackage' => TESTDIR . '/data/phpMyAdmin-4.0.5.4.zpk',
+				'baseUrl' => 'http://www.phpmyadmin.dev',
+				'defaultServer' => true,
+			)
+		);
 		var_dump($response->getInnerResponse()->getBody());
 	}
 }

@@ -1,7 +1,7 @@
 <?php
-namespace ZendPattern\Zsf\Api\Service\Listener;
+namespace ZendPattern\Zsf\Api\Listener;
 
-use ZendPattern\Zsf\Api\Service\ApiServiceEvent;
+use ZendPattern\Zsf\Api\ApiCallEvent;
 
 class HeadersListener
 {
@@ -10,7 +10,7 @@ class HeadersListener
 	/**
 	 * Prepare the request before it been send to Zend Server
 	 */
-	public function computeHeaders(ApiServiceEvent $event)
+	public function computeHeaders(ApiCallEvent $event)
 	{
 		$request = $event->getRequest();
 		$signature = self::computeSignature($request);

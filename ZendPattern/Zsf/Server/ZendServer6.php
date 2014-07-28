@@ -4,8 +4,7 @@ namespace ZendPattern\Zsf\Server;
 use ZendPattern\Zsf\Feature\FeatureSet;
 use ZendPattern\Zsf\Exception\Exception;
 use ZendPattern\Zsf\Api\Key\KeyManager;
-use ZendPattern\Zsf\Api\Service\ZendServer\Server\GetSystemInfo;
-use ZendPattern\Zsf\Feature\ZendServer6\AutoDiscover;
+use ZendPattern\Zsf\Core\Version;
 
 class ZendServer6 extends ServerAbstract
 {
@@ -48,7 +47,7 @@ class ZendServer6 extends ServerAbstract
 	 */
 	protected function init()
 	{
-		$this->addFeature(new AutoDiscover());
-		$this->addFeature(new GetSystemInfo());
+		//$this->addFeature(new AutoDiscover());
+		//$this->addFeature(new GetSystemInfo());
 	}
 }

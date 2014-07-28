@@ -1,7 +1,7 @@
 <?php
-namespace ZendPattern\Zsf\Api\Service\Listener;
+namespace ZendPattern\Zsf\Api\Listener;
 
-use ZendPattern\Zsf\Api\Service\ApiServiceEvent;
+use ZendPattern\Zsf\Api\ApiCallEvent;
 
 /**
  * Listener in charge of complete request content 
@@ -14,9 +14,9 @@ class RequestContentListener
 	 * Compute request body
 	 * @param ApiServiceEvent $event
 	 */
-	public function prepareBody(ApiServiceEvent $event)
+	public function prepareBody(ApiCallEvent $event)
 	{
-		$parameters = $event->getService()->getParameters();
+		$parameters = $event->getApiService()->getParameters();
 		$request = $event->getRequest();
 		if ( ! $request->isPost() || count($parameters) == 0) return;
 		$body = '';

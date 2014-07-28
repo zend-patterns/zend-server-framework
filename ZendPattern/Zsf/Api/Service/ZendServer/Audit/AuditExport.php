@@ -18,6 +18,5 @@ class AuditExport extends ServiceAbstract
 		$this->requiredPermission = self::PERMISSION_READ;
 		$this->uriPath = 'auditExport';
 		$this->addParameter(new ApiParameter('filters', ApiParameter::TYPE_ARRAY));
-		$this->setResponsePrototype(new ResponseFile());
 	}
 }

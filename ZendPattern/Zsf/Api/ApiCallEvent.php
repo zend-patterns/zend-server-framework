@@ -1,18 +1,26 @@
 <?php
-namespace ZendPattern\Zsf\Api\Service;
+namespace ZendPattern\Zsf\Api;
 
 use Zend\EventManager\Event;
 use ZendPattern\Zsf\Api\ApiRequest;
 use ZendPattern\Zsf\Api\Response\ResponseAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 
-class ApiServiceEvent extends Event
+class ApiCallEvent extends Event
 {
 	/**
-	 * Api service recursion
+	 * ApiCall feature
+	 * 
+	 * @var ApiCall
+	 */
+	protected $apiCall;
+	
+	/**
+	 * Api Service
 	 * 
 	 * @var ApiServiceAbstract
 	 */
-	protected $service;
+	protected $apiService;
 	
 	/**
 	 * API request
@@ -34,20 +42,6 @@ class ApiServiceEvent extends Event
 	 * @var string
 	 */
 	protected $multiPartBoundary;
-	
-	/**
-	 * @return the $service
-	 */
-	public function getService() {
-		return $this->service;
-	}
-
-	/**
-	 * @param \ZendPattern\Zsf\Api\Service\ServiceAbstract $service
-	 */
-	public function setService($service) {
-		$this->service = $service;
-	}
 	
 	/**
 	 * @return the $request
@@ -89,5 +83,32 @@ class ApiServiceEvent extends Event
 	 */
 	public function setMultiPartBoundary($multiPartBoundary) {
 		$this->multiPartBoundary = $multiPartBoundary;
+	}
+	/**
+	 * @return the $apiCall
+	 */
+	public function getApiCall() {
+		return $this->apiCall;
+	}
+
+	/**
+	 * @param \ZendPattern\Zsf\Api\Service\ServiceAbstract $apiCall
+	 */
+	public function setApiCall($apiCall) {
+		$this->apiCall = $apiCall;
+	}
+	
+	/**
+	 * @return the $apiService
+	 */
+	public function getApiService() {
+		return $this->apiService;
+	}
+
+	/**
+	 * @param \ZendPattern\Zsf\Api\Service\ApiServiceAbstract $apiService
+	 */
+	public function setApiService($apiService) {
+		$this->apiService = $apiService;
 	}
 }

@@ -3,7 +3,6 @@ namespace ZendPattern\Zsf\Server;
 
 use ZendPattern\Zsf\Feature\FeatureSet;
 use ZendPattern\Zsf\Feature\FeatureInterface;
-use ZendPattern\Zsf\Core\Version;
 use ZendPattern\Zsf\Api\Key\KeyManager;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use ZendPattern\Zsf\Exception\Exception;
@@ -20,7 +19,7 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	/**
 	 * Zend Server version
 	 * 
-	 * @var Version
+	 * @var string
 	 */
 	protected $version;
 	
@@ -65,7 +64,7 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	 * @param string $version
 	 */
 	public function setVersion($version) {
-		$this->version = new Version($version);
+		$this->version = $version;
 		$this->apiVersion = null;
 	}
 	
@@ -77,7 +76,7 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	{
 		if ($this->apiVersion) return $this->apiVersion;
 		$config = include __DIR__ . '/../Config/api.versions.config.php';
-		$version = $this->version->getFullVersion();
+		$version = $this->version;
 		if ( ! isset($config[$version])) throw new Exception('no API define for Zend Server ' .$version);
 		$this->apiVersion = $config[$version];
 		return $this->apiVersion;
