@@ -1,6 +1,6 @@
 <?php
 return array(
-	'rootUri' => 'http://www.zendserver7.dev:10081/',
+	'rootUri' => 'http://www.development.dev:10081/',
 	'keyName' => 'admin',
-	'keyHash' => '3a4f86809a6e6a0c6e17d61360c906f1d4f10a16fb7053ba04f7456b2d16b624',
+	'keyHash' => 'fbe81fdc0ffd2b1f281c2e57aaea746ca50df2e16c613fd493af2a07b9a2eb7f',
 );

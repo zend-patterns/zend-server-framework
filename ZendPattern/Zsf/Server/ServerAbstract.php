@@ -6,7 +6,11 @@ use ZendPattern\Zsf\Feature\FeatureInterface;
 use ZendPattern\Zsf\Api\Key\KeyManager;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use ZendPattern\Zsf\Exception\Exception;
-
+/**
+ * Abstract class for Al zend Server instance
+ * @author sophpie
+ *
+ */
 abstract class ServerAbstract implements ServerInterface, RoleInterface
 {
 	/**
@@ -61,7 +65,8 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	}
 
 	/**
-	 * @param string $version
+	 * (non-PHPdoc)
+	 * @see \ZendPattern\Zsf\Server\ServerInterface::setVersion()
 	 */
 	public function setVersion($version) {
 		$this->version = $version;
@@ -115,21 +120,24 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	}
 	
 	/**
-	 * @return the $webInterface
+	 * (non-PHPdoc)
+	 * @see \ZendPattern\Zsf\Server\ServerInterface::getWebInterface()
 	 */
 	public function getWebInterface() {
 		return $this->webInterface;
 	}
 
 	/**
-	 * @param \ZendPattern\ZSWebAPI2\Server\WebInterface $webInterface
+	 * (non-PHPdoc)
+	 * @see \ZendPattern\Zsf\Server\ServerInterface::setWebInterface()
 	 */
-	public function setWebInterface($webInterface) {
+	public function setWebInterface(WebInterface $webInterface) {
 		$this->webInterface = $webInterface;
 	}
 	
 	/**
-	 * @param string $edition
+	 * (non-PHPdoc)
+	 * @see \ZendPattern\Zsf\Server\ServerInterface::setEdition()
 	 */
 	public function setEdition($edition) {
 		$this->edition = $edition;
@@ -174,18 +182,18 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	abstract protected function checkEditionValidity();
 	
 	/**
-	 * Get Key manager
-	 * 
-	 * @return KeyManager
+	 * (non-PHPdoc)
+	 * @see \ZendPattern\Zsf\Server\ServerInterface::getKeyManager()
 	 */
 	public function getKeyManager() {
 		return $this->keyManager;
 	}
 
 	/**
-	 * @param \ZendPattern\ZSWebAPI2\Api\Key\KeyManager $keyManager
+	 * (non-PHPdoc)
+	 * @see \ZendPattern\Zsf\Server\ServerInterface::setKeyManager()
 	 */
-	public function setKeyManager($keyManager) {
+	public function setKeyManager(KeyManager $keyManager) {
 		$this->keyManager = $keyManager;
 	}
 	

@@ -44,13 +44,22 @@ class UnitTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function GetSystemInfo()
+	{
+		$response = $this->zendServer->apiCall('getSystemInfo');
+		var_dump($response->getInnerResponse()->getBody());
+	}
+	
+	/**
+	 * @_test
+	 */
 	public function ApplicationDeploy()
 	{
 		$response = $this->zendServer->apiCall(
 			'applicationDeploy',
 			array(
 				'appPackage' => TESTDIR . '/data/phpMyAdmin-4.0.5.4.zpk',
-				'baseUrl' => 'http://www.phpmyadmin.dev',
+				'baseUrl' => 'http://<default-server>',
 				'defaultServer' => true,
 			)
 		);

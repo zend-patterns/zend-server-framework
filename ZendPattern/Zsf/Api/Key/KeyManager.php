@@ -52,7 +52,7 @@ class KeyManager
 	public function getApiKey($keyName = null)
 	{
 		if ( ! $keyName) return $this->getAdminApiKey();
-		if ( ! isset($this->apiKeys[$keyName])) throw new Exception('Requested api does\'nt exixsts : ' . $keyName);
+		if ( ! isset($this->apiKeys[$keyName])) throw new Exception('Requested api doesn\'t exixsts : ' . $keyName);
 		return $this->apiKeys[$keyName];
 	}
 	
@@ -67,24 +67,6 @@ class KeyManager
 	}
 	
 	/**
-	 * Configure Api Manager
-	 * 
-	 * @param array $config
-	 * @throws Exception
-	 */
-	public function setConfig($config)
-	{
-		foreach ($config as $keyName => $keyConfig){
-			$username = (isset($keyConfig['username']))?$keyConfig['username']:null;
-			$id = (isset($keyConfig['id']))?$keyConfig['id']:null;
-			$creationTime = (isset($keyConfig['creation-time']))?$keyConfig['creation-time']:null;
-			$apiKey = new ApiKey($keyName,$keyConfig['hash'],$username,$id,$creationTime);
-			if ( ! $apiKey) throw new Exception('Can\'t genrate api key ' . $keyName);
-			$this->addApiKey($apikey);
-		}
-	}
-	
-	/**
 	 * Check key validity
 	 * 
 	 * @param string $keyName
@@ -93,6 +75,16 @@ class KeyManager
 	public function validateKey($keyName,$keyHash)
 	{
 		$key = $this->getApiKey($keyName);
-		return ($keyHask == $key->getHash());
+		return ($keyHash == $key->getHash());
+	}
+	
+	/**
+	 * Key API Keys list
+	 * 
+	 * @return array
+	 */
+	public function getApiKeys()
+	{
+		return $this->apiKeys;
 	}
 }

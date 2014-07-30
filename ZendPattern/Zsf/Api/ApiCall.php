@@ -77,6 +77,11 @@ use Zend\Stdlib\Parameters;
 	/**
 	 * (non-PHPdoc)
 	 * @see \ZendPattern\Zsf\Feature\FeatureAbstract::__invoke()
+	 * 
+	 * @param string api service name
+	 * @param array api parameters
+	 * @param string api key name
+	 * @param Client HTTP client
 	 */
 	public function __invoke($args)
 	{

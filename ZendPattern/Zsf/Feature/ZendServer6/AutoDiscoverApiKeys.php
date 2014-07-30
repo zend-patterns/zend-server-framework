@@ -4,7 +4,13 @@ namespace ZendPattern\Zsf\Feature\ZendServer6;
 use ZendPattern\Zsf\Feature\FeatureAbstract;
 use ZendPattern\Zsf\Api\Key\KeyManager;
 use ZendPattern\Zsf\Api\Key\Key;
-
+/**
+ * This feature allow server to discover and set its own API keys.
+ * @param string $adminApiKeyHash : hash value for the Admin key
+ * $server->autoDiscoverApiKeys($adminApiKeyHash)
+ * @author sophpie
+ *
+ */
 class AutoDiscoverApiKeys extends FeatureAbstract
 {
 	/**
@@ -13,7 +19,7 @@ class AutoDiscoverApiKeys extends FeatureAbstract
 	public function __construct()
 	{
 		$this->setDependencies(array(
-			'ZendPattern\Zsf\Api\Service\ZendServer\Administration\ApiKeysGetList'
+			'ZendPattern\Zsf\Api\ApiCall'
 		));
 	}
 	
@@ -24,7 +30,7 @@ class AutoDiscoverApiKeys extends FeatureAbstract
 	public function __invoke($args)
 	{
 		$keyManager = new KeyManager();
-		$apiKeyList = $this->server->apiKeysGetList()->getXmlContent();
+		$apiKeyList = $this->server->apiCall('apiKeysGetList')->getXmlContent();
 		foreach ($apiKeyList->responseData->apiKeys->apiKey as $apiKey){
 			$id = (string) $apiKey->id;
 			$name = (string) $apiKey->name;
