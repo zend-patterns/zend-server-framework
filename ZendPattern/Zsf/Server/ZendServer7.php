@@ -1,18 +1,14 @@
 <?php
 namespace ZendPattern\Zsf\Server;
 
-use ZendPattern\Zsf\Feature\FeatureSet;
-use ZendPattern\Zsf\Exception\Exception;
-use ZendPattern\Zsf\Api\Key\KeyManager;
-use ZendPattern\Zsf\Api\Service\ZendServer\Server\GetSystemInfo;
 use ZendPattern\Zsf\Feature\ZendServer6\AutoDiscover;
 
-class ZendServer7 extends ServerAbstract
+class ZendServer7 extends ZendServer
 {
 	const EDITION_FREE = 'free';
 	const EDITION_SMB = 'smb';
 	const EDITION_PRO = 'pro';
-	const EDITION_ENTERPRISE = 'ZendServerCluster';
+	const EDITION_ENTERPRISE = 'ENTEPRISE';
 	
 	/**
 	 * Constructor
@@ -21,16 +17,11 @@ class ZendServer7 extends ServerAbstract
 	 * @param string $rootUri
 	 * @param string $apiPath
 	 */
-	public function __construct($version = '7.0.0' ,$edition = self::EDITION_SMB,$rootUri = WebInterface::DEFAULT_HOST,$apiPath = WebInterface::DEFAULT_API_PATH)
+	public function __construct()
 	{
-		$this->setVersion($version);
-		$this->setEdition($edition);
-		if ( ! $this->checkEditionValidity()) 
-			throw new Exception ($edition . ' is not available for Zend Server ' . $version);
-		$this->setKeyManager(new KeyManager());
-		$this->setWebInterface(new WebInterface($rootUri,$apiPath));
-		$this->setFeatureSet(new FeatureSet());
-		if (method_exists($this, 'init')) $this->init();
+		parent::__construct();
+		$this->setVersion('7.0.0');
+		$this->addFeature(new AutoDiscover());
 	}
 	
 	/**
@@ -41,14 +32,5 @@ class ZendServer7 extends ServerAbstract
 	{
 		$available_editions = array(self::EDITION_FREE, self::EDITION_ENTERPRISE, self::EDITION_PRO, self::EDITION_SMB);
 		return in_array($this->edition, $available_editions);
-	}
-	
-	/**
-	 * Initiate Zend Server 7 minimal features
-	 */
-	protected function init()
-	{
-		$this->addFeature(new AutoDiscover());
-		$this->addFeature(new GetSystemInfo());
 	}
 }

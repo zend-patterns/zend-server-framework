@@ -12,38 +12,21 @@ use ZendPattern\Zsf\Api\Key\Key;
 class Configurator
 {
 	/**
-	 * Configuration Array
-	 * 
-	 * @var array
-	 */
-	protected $configuration = array();
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param array $configuration
-	 */
-	public function __construct($configuration)
-	{
-		$this->configuration = $configuration;
-	}
-	
-	/**
 	 * Configure server
 	 * 
 	 * @param ServerInterface $server
 	 * @return ServerInterface
 	 */
-	public function configure(ServerInterface $server)
+	public function configure(ServerInterface $server, array $configuration)
 	{
-		if (isset($this->configuration['version'])) $server->setVersion($this->configuration['version']);
-		if (isset($this->configuration['edition'])) $server->setEdition($this->configuration['edition']);
-		if (isset($this->configuration['uriPath'])) $server->getWebInterface()->setRootUri($this->configuration['uriPath']);
-		if (isset($this->configuration['apiPath'])) $server->getWebInterface()->setApiPath($this->configuration['apiPath']);
-		if (isset($this->configuration['apiKeys'])) {
-			if (is_array($this->configuration['apiKeys'])) {
+		if (isset($configuration['version'])) $server->setVersion($configuration['version']);
+		if (isset($configuration['edition'])) $server->setEdition($configuration['edition']);
+		if (isset($configuration['uriPath'])) $server->getWebInterface()->setRootUri($configuration['uriPath']);
+		if (isset($configuration['apiPath'])) $server->getWebInterface()->setApiPath($configuration['apiPath']);
+		if (isset($configuration['apiKeys'])) {
+			if (is_array($configuration['apiKeys'])) {
 				$keyManager = new KeyManager();
-				foreach ($this->configuration['apikeys'] as $name => $hash){
+				foreach ($configuration['apikeys'] as $name => $hash){
 					if ($name == 'admin') $isAdmin = true;
 					else $isAdmin = false;
 					$keyManager->addApiKey(new Key($name, $hash),$isAdmin);
@@ -51,14 +34,23 @@ class Configurator
 				$server->setKeyManager($keyManager);
 			}
 		}
-		if (isset($this->configuration['features'])) {
-			if (is_array($this->configuration['features'])) {
-				foreach ($this->configuration['features'] as $featureClass){
+		if (isset($configuration['features'])) {
+			if (is_array($configuration['features'])) {
+				foreach ($configuration['features'] as $featureClass){
 					$feature = new $featureClass();
 					$server->addFeature($feature);
 				}
 			}
 		}
 		return $server;
+	}
+	
+	/**
+	 * Check if given configuration is ok
+	 * 
+	 * @param array $configuration
+	 */
+	protected function checkConfiguration(array $configuration)
+	{
 	}
 }
