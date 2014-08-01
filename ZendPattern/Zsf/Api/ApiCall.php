@@ -75,6 +75,14 @@ use Zend\Stdlib\Parameters;
 	protected $apiServiceName;
 	
 	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->setMinimalZSVersion('5.1.0');
+	}
+	
+	/**
 	 * (non-PHPdoc)
 	 * @see \ZendPattern\Zsf\Feature\FeatureAbstract::__invoke()
 	 * 

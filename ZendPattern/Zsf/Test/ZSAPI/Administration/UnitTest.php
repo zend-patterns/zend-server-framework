@@ -6,6 +6,7 @@ use ZendPattern\Zsf\Server\WebInterface;
 use ZendPattern\Zsf\Api\Key\Key;
 use ZendPattern\Zsf\Api\Service\ZendServer\Deployment\ApplicationDeploy;
 use ZendPattern\Zsf\Api\ApiCall;
+use ZendPattern\Zsf\Feature\Common\EventDispatcher\FeatureCallDispatcher;
 
 class UnitTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,6 +31,8 @@ class UnitTest extends \PHPUnit_Framework_TestCase
 		$this->zendServer->setWebInterface($webInterface);
 		$apiKey = new Key(self::$ZSconfig['keyName'], self::$ZSconfig['keyHash']);
 		$this->zendServer->getKeyManager()->addApiKey($apiKey,true);
+		
+		$this->zendServer->addFeature(new FeatureCallDispatcher());
 	}
 	
 	/**

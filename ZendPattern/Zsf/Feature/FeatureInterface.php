@@ -38,4 +38,10 @@ interface FeatureInterface
 	 */
 	public function getDependencies();
 	
+	/**
+	 * Get suitable minimal version of Zend Server
+	 * 
+	 * @return string
+	 */
+	public function getMinimalZSVersion();
 }

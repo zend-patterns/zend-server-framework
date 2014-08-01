@@ -3,7 +3,12 @@ namespace ZendPattern\Zsf\Feature;
 
 use ZendPattern\Zsf\Server\ServerInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-
+/**
+ * Minimal implementation of Feature
+ * 
+ * @author sophpie
+ *
+ */
 abstract class FeatureAbstract implements FeatureInterface, ResourceInterface
 {
 	/**
@@ -14,7 +19,7 @@ abstract class FeatureAbstract implements FeatureInterface, ResourceInterface
 	protected $server;
 	
 	/**
-	 * List of dependent feature
+	 * List of dependent features
 	 * 
 	 * @var array
 	 */
@@ -27,6 +32,13 @@ abstract class FeatureAbstract implements FeatureInterface, ResourceInterface
 	 */
 	protected $name;
 	
+	/**
+	 * Minimal version of Zend Server that it is compatible with this feature
+	 * 
+	 * @var string
+	 */
+	protected $minimalZSVersion = '5.0.0';
+
 	/**
 	 * Empty constrcutor by default
 	 */
@@ -94,5 +106,18 @@ abstract class FeatureAbstract implements FeatureInterface, ResourceInterface
 	{
 		return $this->getName();
 	}
-
+	
+	/**
+	 * @return the $minimalZSVersion
+	 */
+	public function getMinimalZSVersion() {
+		return $this->minimalZSVersion;
+	}
+	
+	/**
+	 * @param string $minimalZSVersion
+	 */
+	protected function setMinimalZSVersion($minimalZSVersion) {
+		$this->minimalZSVersion = $minimalZSVersion;
+	}
 }

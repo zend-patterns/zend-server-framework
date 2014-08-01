@@ -60,7 +60,7 @@ The code above will result in `7.0.0`.
 The feature parameters are : 
 
 * $serviceName : name of called service
-* $serviceParams : array of service parameter correpsonding to GET or POST parameters you need to run the API call.
+* $serviceParams : array of service parameter corresponding to GET or POST parameters you need to run the API call.
 * $apiKeyName : name of the API key to use.If none provides, will use 'admin' key.
 * $httpClient : a custom HTTP client.
 
@@ -78,4 +78,5 @@ Another example with "deployApplication" service :
 ### AutoDiscover
 
 ### Create you own features.
+The best usage of feature is that you can add any feature you want on your Zend Server.
 

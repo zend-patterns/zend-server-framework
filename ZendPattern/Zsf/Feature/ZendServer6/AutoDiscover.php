@@ -15,6 +15,7 @@ class AutoDiscover extends FeatureAbstract
 		$this->setDependencies(array(
 				'ZendPattern\Zsf\Feature\ZendServer6\AutoDiscoverApiKeys'
 		));
+		$this->setMinimalZSVersion('5.0.0');
 	}
 	
 	/**

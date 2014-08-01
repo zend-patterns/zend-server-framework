@@ -98,6 +98,7 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	 * @return the $featureSet
 	 */
 	public function getFeatureSet() {
+		if ( ! $this->featureSet) $this->setFeatureSet(new FeatureSet());
 		return $this->featureSet;
 	}
 
@@ -105,6 +106,7 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	 * @param \ZendPattern\ZSWebAPI2\Feature\FeatureSet $featureSet
 	 */
 	public function setFeatureSet($featureSet) {
+		$featureSet->setServer($this);
 		$this->featureSet = $featureSet;
 	}
 	
@@ -115,8 +117,18 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	 */
 	public function addFeature(FeatureInterface $feature)
 	{
-		$feature->setServer($this);
 		$this->getFeatureSet()->addFeature($feature);
+	}
+	
+	/**
+	 * Chec if Server has the given feature
+	 * 
+	 * @param string $featureName
+	 * @return boolean
+	 */
+	public function hasFeature($featureName) 
+	{
+		return $this->getFeatureSet()->hasFeature($name);
 	}
 	
 	/**
@@ -153,25 +165,10 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	{
 		if ($this->featureSet->hasFeature($method)) {
 			$feature = $this->featureSet->get($method);
-			$feature->setServer($this);
-			return $feature($args);
-		}
-		else throw new Exception('Feature or method : ' .$method . ' is not defined');
-	}
-	
-	/**
-	 * Calling features statically
-	 * 
-	 * @param string $method
-	 * @param array $args
-	 * @throws Exception
-	 */
-	static public function __callstatic($method,$args)
-	{
-		if ($this->featureSet->hasFeature($method)) {
-			$feature = $this->featureSet->get($method);
-			$feature->setServer($this);
-			return $feature($args);
+			if ($this->hasFeature('featureCallDispatcher')) $this->featureCallDispatcher()->triggerPreCall($method, $args);
+			$result = $feature($args);
+			if ($this->hasFeature('featureCallDispatcher')) $this->featureCallDispatcher()->triggerPostCall($result);
+			return $result;
 		}
 		else throw new Exception('Feature or method : ' .$method . ' is not defined');
 	}

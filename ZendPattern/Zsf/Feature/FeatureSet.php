@@ -1,6 +1,8 @@
 <?php
 namespace ZendPattern\Zsf\Feature;
 
+use ZendPattern\Zsf\Server\ServerInterface;
+use ZendPattern\Zsf\Exception\Exception;
 class FeatureSet
 {
 	/**
@@ -9,6 +11,13 @@ class FeatureSet
 	 * @var array
 	 */
 	protected $features = array();
+	
+	/**
+	 * Reference to server
+	 * 
+	 * @var ServerInterface
+	 */
+	protected $server;
 	
 	/**
 	 * Adding feature
@@ -20,9 +29,25 @@ class FeatureSet
 		if ($this->hasFeature($feature->getName())) return;
 		foreach ($feature->getDependencies() as $depName){
 			$dependency = new $depName();
+			$this->checkFeatureCompatibiliy($dependency);
 			$this->addFeature($dependency);
 		}
+		$this->checkFeatureCompatibiliy($feature);
+		$feature->setServer($this->server);
 		$this->features[$feature->getName()] = $feature;
+	}
+	
+	/**
+	 * Check if given feature is compatible with server
+	 * 
+	 * @return boolean
+	 */
+	protected function checkFeatureCompatibiliy(FeatureInterface $feature)
+	{
+		if (version_compare($this->server->getVersion(), $feature->getMinimalZSVersion(),'<')) {
+			throw new Exception($feature->getName() . ' need Zend Server ' . $feature->getMinimalZSVersion() . ' at least. Zend Server version is ' . $this->server->getVersion());
+		}
+		return true;
 	}
 	
 	/**
@@ -58,4 +83,19 @@ class FeatureSet
 		if ( ! $this->hasFeature($name)) return;
 		return $this->features[$name];
 	}
+	
+	/**
+	 * @return the $server
+	 */
+	public function getServer() {
+		return $this->server;
+	}
+
+	/**
+	 * @param \ZendPattern\Zsf\Server\ServerInterface $server
+	 */
+	public function setServer($server) {
+		$this->server = $server;
+	}
+
 }

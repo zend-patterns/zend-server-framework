@@ -21,6 +21,7 @@ class AutoDiscoverApiKeys extends FeatureAbstract
 		$this->setDependencies(array(
 			'ZendPattern\Zsf\Api\ApiCall'
 		));
+		$this->setMinimalZSVersion('6.0.0');
 	}
 	
 	/**
