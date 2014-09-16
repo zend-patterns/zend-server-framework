@@ -2,7 +2,7 @@
 
 namespace ZendPattern\Zsf\Api\Service\ZendServer;
 
-use ZendPattern\Zsf\Api\Service\ServiceAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
 /**
  * Modify a current user password.
@@ -14,7 +14,7 @@ use ZendPattern\Zsf\Api\ApiParameter;
  * @author sophpie
  *
  */
-class SetPassword extends ServiceAbstract
+class SetPassword extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
@@ -23,7 +23,7 @@ class SetPassword extends ServiceAbstract
 	{
 		$this->httpMethod = self::HTTP_METHOD_POST;
 		$this->uriPath = 'setPassword';
-		$this->version = '1.3';
+		$this->apiVersion = '1.3';
 		$this->addParameter(new ApiParameter('password', ApiParameter::TYPE_STRING,true));
 		$this->addParameter(new ApiParameter('newPassword', ApiParameter::TYPE_STRING,true));
 		$this->addParameter(new ApiParameter('confirmNewPassword', ApiParameter::TYPE_STRING,true));

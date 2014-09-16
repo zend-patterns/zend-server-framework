@@ -2,7 +2,7 @@
 
 namespace ZendPattern\Zsf\Api\Service\ZendServer;
 
-use ZendPattern\Zsf\Api\Service\ServiceAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
 /**
  * Store a set of group mappings for resolving user roles during authentication.
@@ -15,7 +15,7 @@ use ZendPattern\Zsf\Api\ApiParameter;
  * @author sophpie
  *
  */
-class UserSetAclGroups extends ServiceAbstract
+class UserSetAclGroups extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
@@ -24,7 +24,7 @@ class UserSetAclGroups extends ServiceAbstract
 	{
 		$this->httpMethod = self::HTTP_METHOD_POST;
 		$this->uriPath = 'userSetAclGroups';
-		$this->version = '1.3';
+		$this->apiVersion = '1.3';
 		$this->addParameter(new ApiParameter('role_groups', ApiParameter::TYPE_ARRAY,true));
 		$this->addParameter(new ApiParameter('app_groups', ApiParameter::TYPE_ARRAY));
 	}

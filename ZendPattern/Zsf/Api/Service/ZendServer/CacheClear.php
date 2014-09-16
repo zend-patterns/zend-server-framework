@@ -2,7 +2,7 @@
 
 namespace ZendPattern\Zsf\Api\Service\ZendServer;
 
-use ZendPattern\Zsf\Api\Service\ServiceAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
 /**
  * Clear cache data of a specified component.
@@ -14,7 +14,7 @@ use ZendPattern\Zsf\Api\ApiParameter;
  * @author sophpie
  *
  */
-class CacheClear extends ServiceAbstract
+class CacheClear extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
@@ -23,7 +23,7 @@ class CacheClear extends ServiceAbstract
 	{
 		$this->httpMethod = self::HTTP_METHOD_POST;
 		$this->uriPath = 'cacheClear';
-		$this->version = '1.3';
+		$this->apiVersion = '1.3';
 		$this->addParameter(new ApiParameter('component', ApiParameter::TYPE_STRING,true));
 	}
 }

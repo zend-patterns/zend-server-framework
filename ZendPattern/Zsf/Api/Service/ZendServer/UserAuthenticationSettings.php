@@ -2,7 +2,7 @@
 
 namespace ZendPattern\Zsf\Api\Service\ZendServer;
 
-use ZendPattern\Zsf\Api\Service\ServiceAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
 /**
  * Modify current authentication settings, allowing the user to switch between simple and extended authentication and authorization schemes.
@@ -14,7 +14,7 @@ use ZendPattern\Zsf\Api\ApiParameter;
  * @author sophpie
  *
  */
-class UserAuthenticationSettings extends ServiceAbstract
+class UserAuthenticationSettings extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
@@ -23,7 +23,7 @@ class UserAuthenticationSettings extends ServiceAbstract
 	{
 		$this->httpMethod = self::HTTP_METHOD_POST;
 		$this->uriPath = 'userAuthenticationSettings';
-		$this->version = '1.3';
+		$this->apiVersion = '1.3';
 		$this->addParameter(new ApiParameter('type', ApiParameter::TYPE_ENUM,true));
 		$this->addParameter(new ApiParameter('ldap', ApiParameter::TYPE_ARRAY,true));
 		$this->addParameter(new ApiParameter('password', ApiParameter::TYPE_STRING,true));

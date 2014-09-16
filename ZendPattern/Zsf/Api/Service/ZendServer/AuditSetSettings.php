@@ -2,7 +2,7 @@
 
 namespace ZendPattern\Zsf\Api\Service\ZendServer;
 
-use ZendPattern\Zsf\Api\Service\ServiceAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
 use ZendPattern\Zsf\Api\Response\ResponseFile;
 /**
@@ -15,7 +15,7 @@ use ZendPattern\Zsf\Api\Response\ResponseFile;
  * @author sophpie
  *
  */
-class AuditSetSettings extends ServiceAbstract
+class AuditSetSettings extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
@@ -23,7 +23,7 @@ class AuditSetSettings extends ServiceAbstract
 	public function __construct()
 	{
 		$this->httpMethod = self::HTTP_METHOD_GET;
-		$this->version = '1.3';
+		$this->apiVersion = '1.3';
 		$this->uriPath = 'auditSetSettings';
 		$this->addParameter(new ApiParameter('email', ApiParameter::TYPE_STRING));
 		$this->addParameter(new ApiParameter('callbackUrl', ApiParameter::TYPE_STRING));

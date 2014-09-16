@@ -2,7 +2,7 @@
 
 namespace ZendPattern\Zsf\Api\Service\ZendServer;
 
-use ZendPattern\Zsf\Api\Service\ServiceAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
 /**
  * Validate a Zend Server license
@@ -14,7 +14,7 @@ use ZendPattern\Zsf\Api\ApiParameter;
  * @author sophpie
  *
  */
-class ServerValidateLicense extends ServiceAbstract
+class ServerValidateLicense extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
@@ -23,7 +23,7 @@ class ServerValidateLicense extends ServiceAbstract
 	{
 		$this->httpMethod = self::HTTP_METHOD_POST;
 		$this->uriPath = 'serverValidateLicense';
-		$this->version = '1.3';
+		$this->apiVersion = '1.3';
 		$this->addParameter(new ApiParameter('licenseName', ApiParameter::TYPE_STRING,true));
 		$this->addParameter(new ApiParameter('licenseValue', ApiParameter::TYPE_STRING,true));
 	}

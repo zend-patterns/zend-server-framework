@@ -14,7 +14,7 @@ use ZendPattern\Zsf\Api\ApiParameter;
  * @author sophpie
  *
  */
-class ApiKeysRemoveKey extends ServiceAbstract
+class ApiKeysRemoveKey extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
@@ -23,7 +23,7 @@ class ApiKeysRemoveKey extends ServiceAbstract
 	{
 		$this->httpMethod = self::HTTP_METHOD_POST;
 		$this->uriPath = 'apiKeysRemoveKey';
-		$this->version = '1.3';
+		$this->apiVersion = '1.3';
 		$this->addParameter(new ApiParameter('ids', ApiParameter::TYPE_ARRAY,true));
 	}
 }

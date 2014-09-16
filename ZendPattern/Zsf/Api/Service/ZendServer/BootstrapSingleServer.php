@@ -2,7 +2,7 @@
 
 namespace ZendPattern\Zsf\Api\Service\ZendServer;
 
-use ZendPattern\Zsf\Api\Service\ServiceAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
 /**
  * Bootstrap a server for standalone usage in production or development environment.
@@ -23,7 +23,7 @@ use ZendPattern\Zsf\Api\ApiParameter;
  * @author sophpie
  *
  */
-class BootstrapSingleServer extends ServiceAbstract
+class BootstrapSingleServer extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
@@ -32,7 +32,7 @@ class BootstrapSingleServer extends ServiceAbstract
 	{
 		$this->httpMethod = self::HTTP_METHOD_POST;
 		$this->uriPath = 'bootstrapSingleServer';
-		$this->version = '1.3';
+		$this->apiVersion = '1.3';
 		$this->addParameter(new ApiParameter('production', ApiParameter::TYPE_BOOLEAN));
 		$this->addParameter(new ApiParameter('adminPassword', ApiParameter::TYPE_STRING,true));
 		$this->addParameter(new ApiParameter('applicationUrl', ApiParameter::TYPE_STRING));

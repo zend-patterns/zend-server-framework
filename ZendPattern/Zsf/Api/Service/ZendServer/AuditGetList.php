@@ -2,7 +2,7 @@
 
 namespace ZendPattern\Zsf\Api\Service\ZendServer;
 
-use ZendPattern\Zsf\Api\Service\ServiceAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
 /**
  * Get a list of audit entries.
@@ -14,7 +14,7 @@ use ZendPattern\Zsf\Api\ApiParameter;
  * @author sophpie
  *
  */
-class AuditGetList extends ServiceAbstract
+class AuditGetList extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
@@ -22,7 +22,7 @@ class AuditGetList extends ServiceAbstract
 	public function __construct()
 	{
 		$this->httpMethod = self::HTTP_METHOD_GET;
-		$this->version = '1.3';
+		$this->apiVersion = '1.3';
 		$this->uriPath = 'auditGetList';
 		$this->addParameter(new ApiParameter('limit', ApiParameter::TYPE_INTEGER));
 		$this->addParameter(new ApiParameter('offset', ApiParameter::TYPE_INTEGER));

@@ -1,7 +1,7 @@
 <?php
 namespace ZendPattern\Zsf\Api\Service\ZendServer;
 
-use ZendPattern\Zsf\Api\Service\ServiceAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
 /**
  * Get the list of applications currently deployed (or staged) on the server or the cluster and information about each application.
@@ -15,7 +15,7 @@ use ZendPattern\Zsf\Api\ApiParameter;
  * @author sophpie
  *
  */
-class ApplicationGetStatus extends ServiceAbstract
+class ApplicationGetStatus extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
