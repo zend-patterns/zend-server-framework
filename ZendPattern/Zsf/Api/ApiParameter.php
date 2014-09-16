@@ -8,6 +8,7 @@ class ApiParameter
 	const TYPE_INTEGER = 'integer';
 	const TYPE_FILE = 'file';
 	const TYPE_BOOLEAN = 'boolean';
+	//@todo : add type ENUM (see userAuthentifiactionSettings)
 	
 	/**
 	 * Parameter tyep
