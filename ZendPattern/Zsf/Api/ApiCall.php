@@ -16,7 +16,8 @@ use ZendPattern\Zsf\Exception\Exception;
 use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use Zend\Stdlib\Parameters;
 use ZendPattern\Zsf\Api\Listener\ResponseModelListener;
-								
+use Zend\Http\Client\Adapter\Curl;
+									
 /**
  * Feature that allows to call a Zend Server API service
  */
@@ -77,6 +78,12 @@ use ZendPattern\Zsf\Api\Listener\ResponseModelListener;
 	protected $apiServiceName;
 	
 	/**
+	 * Listener in charge of computing API request headers
+	 * @var HeadersListener
+	 */
+	protected $headerListener;
+	
+	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -87,18 +94,18 @@ use ZendPattern\Zsf\Api\Listener\ResponseModelListener;
 					'xmlModelGenerator',
 					'ZendPattern\Zsf\Api\XmlResponseModelMapperFactory'
 		);
+		$this->headerListener = new HeadersListener();
 		$responseModelListener = new ResponseModelListener();
-		$responseModelListener->attach($this->getEventManager());
 		$responseListener = new ResponseListener();
-		$responseListener->attach($this->getEventManager());
 		$securityListener = new SecurityListener();
-		$securityListener->attach($this->getEventManager());
 		$requestListener = new PrepareRequestListener();
-		$requestListener->attach($this->getEventManager());
 		$requestContentListener = new RequestContentListener();
+		$responseModelListener->attach($this->getEventManager());
+		$responseListener->attach($this->getEventManager());
+		$securityListener->attach($this->getEventManager());
+		$requestListener->attach($this->getEventManager());
 		$requestContentListener->attach($this->getEventManager());
-		$headersListener = new HeadersListener();
-		$headersListener->attach($this->getEventManager());
+		$this->headerListener->attach($this->getEventManager());
 	}
 	
 	/**
@@ -113,6 +120,10 @@ use ZendPattern\Zsf\Api\Listener\ResponseModelListener;
 	public function __invoke($args)
 	{
 		$this->setApiServiceName($args[0]);
+		if ($this->getApiServiceName() == 'bootstrapSingleServer')
+		{
+			$this->headerListener->detachSignature($this->getEventManager());
+		}
 		$apiService = $this->getServiceManager()->get($this->getApiServiceName());
 		$event = $this->getEvent();
 		$event->setApiCall($this);

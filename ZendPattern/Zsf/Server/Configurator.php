@@ -30,7 +30,7 @@ class Configurator
 		if (isset($configuration['apiKeys'])) {
 			if (is_array($configuration['apiKeys'])) {
 				$keyManager = new KeyManager();
-				foreach ($configuration['apikeys'] as $name => $hash){
+				foreach ($configuration['apiKeys'] as $name => $hash){
 					if ($name == 'admin') $isAdmin = true;
 					else $isAdmin = false;
 					$keyManager->addApiKey(new Key($name, $hash),$isAdmin);

@@ -8,6 +8,9 @@ use Zend\EventManager\EventManagerInterface;
 
 /**
  * Listener in charge of complete request content 
+ * 
+ * Will deal with POST data depending is files have to be sent
+ * within the request
  * @author sophpie
  *
  */
@@ -40,7 +43,21 @@ class RequestContentListener implements ListenerAggregateInterface
 	{
 		$parameters = $event->getApiService()->getParameters();
 		$request = $event->getRequest();
-		if ( ! $request->isPost() || count($parameters) == 0) return;
+		if ( ! $request->isPost()) return;
+		if(count($request->getFiles())) $body = $this->getMultipartBody($event);
+		else $body = $this->getWwwFormUrlencodedBody($event);
+		$request->setContent($body);
+		$event->setRequest($request);
+	}
+	
+	/**
+	 * Compute multipart/form post data
+	 * 
+	 * @param ApiCallEvent $event
+	 * @return string
+	 */
+	protected function getMultipartBody(ApiCallEvent $event)
+	{
 		$body = '';
 		$boundary = '---ZENDHTTPCLIENT-' . md5(microtime());
 		$event->setMultiPartBoundary($boundary);
@@ -53,8 +70,24 @@ class RequestContentListener implements ListenerAggregateInterface
 			$body .= $this->encodeFormData($boundary, $file['formname'], $file['data'], $file['filename'], $fhead);
 		}
 		$body .= "--{$boundary}--\r\n";
-		$request->setContent($body);
-		$event->setRequest($request);
+		return $body;
+	}
+	
+	/**
+	 * Compute body for www-form-urlencode post data
+	 * 
+	 * @param ApiCallEvent $event
+	 * @return string
+	 */
+	protected function getWwwFormUrlencodedBody(ApiCallEvent $event)
+	{
+		$body = '';
+		$request = $event->getRequest();
+		foreach ($request->getPost() as $name => $value) {
+			$body .= '&' . urlencode($name) .'=' . urlencode($value);
+		}
+		$body = trim($body,'&');
+		return $body;
 	}
 	
 	/**

@@ -39,7 +39,7 @@ Zend Server is capabale of autodiscovering itself. All what you need to know is 
 Now your Zend Server is completly setted up.
 
 ## About Zend Server features
-All Zend Server functionallities are implented has plugins we call "features". When you create a new Zend Server it has no feature installed and cannot do anything. 
+All Zend Server functionallities are implented has plugins called "features". When you create a new Zend Server it has no feature installed and cannot do anything. 
 To start adding feature simply use :
 
 	$feature = new ZendPattern\Zsf\Feature\ZendServer6\AutoDiscover();
