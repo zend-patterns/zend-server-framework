@@ -4,8 +4,11 @@ namespace ZendPattern\Zsf\Server;
 use ZendPattern\Zsf\Server\ServerInterface;
 use ZendPattern\Zsf\Api\Key\KeyManager;
 use ZendPattern\Zsf\Api\Key\Key;
+use Zend\Uri\Http;
 /**
  * Configurator for Server instance
+ * 
+ * It is a good way to define servers using array nased configuration.
  * @author sophpie
  *
  */
@@ -19,9 +22,10 @@ class Configurator
 	 */
 	public function configure(ServerInterface $server, array $configuration)
 	{
+		if (isset($configuration['name'])) $server->setName($configuration['name']);
 		if (isset($configuration['version'])) $server->setVersion($configuration['version']);
 		if (isset($configuration['edition'])) $server->setEdition($configuration['edition']);
-		if (isset($configuration['uriPath'])) $server->getWebInterface()->setRootUri($configuration['uriPath']);
+		if (isset($configuration['uriPath'])) $server->getWebInterface()->setRootUri(new Http($configuration['uriPath']));
 		if (isset($configuration['apiPath'])) $server->getWebInterface()->setApiPath($configuration['apiPath']);
 		if (isset($configuration['apiKeys'])) {
 			if (is_array($configuration['apiKeys'])) {

@@ -4,9 +4,34 @@ namespace ZendPattern\Zsf\Api\Listener;
 use ZendPattern\Zsf\Api\ApiRequest;
 use ZendPattern\Zsf\Api\ApiCallEvent;
 use Zend\Stdlib\Parameters;
+use Zend\EventManager\ListenerAggregateInterface;
+use Zend\EventManager\EventManagerInterface;
+use ZendPattern\Zsf\Api\ApiCall;
 
-class PrepareRequestListener
+class PrepareRequestListener implements ListenerAggregateInterface
 {
+	/**
+	 *
+	 * @param EventManagerInterface $event
+	 */
+	public function attach(EventManagerInterface $events)
+	{
+		$events->attach(ApiCall::EVENT_SET_REQUEST,array($this,'createRequest'),10);
+		$events->attach(ApiCall::EVENT_SET_REQUEST,array($this,'setGetParameters'));
+		$events->attach(ApiCall::EVENT_SET_REQUEST,array($this,'setPostParameters'));
+		$events->attach(ApiCall::EVENT_SET_REQUEST,array($this,'setFileParameters'));
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\EventManager\ListenerAggregateInterface::detach()
+	 */
+	public function detach(EventManagerInterface $events)
+	{
+		$events->detach($this);
+		return $this;
+	}
+	
 	/**
 	 * Create base API service Request
 	 * 

@@ -2,9 +2,33 @@
 namespace ZendPattern\Zsf\Api\Listener;
 
 use ZendPattern\Zsf\Api\ApiCallEvent;
+use Zend\EventManager\ListenerAggregateInterface;
+use ZendPattern\Zsf\Api\ApiCall;
+use Zend\EventManager\EventManagerInterface;
 
-class SecurityListener
+class SecurityListener implements ListenerAggregateInterface
 {
+	/**
+	 *
+	 * @param EventManagerInterface $event
+	 */
+	public function attach(EventManagerInterface $events)
+	{
+		$events->attach(ApiCall::EVENT_CHECK_SECURITY,array($this,'checkServerEdition'));
+		$events->attach(ApiCall::EVENT_CHECK_SECURITY,array($this,'checkApiVersion'));
+		$events->attach(ApiCall::EVENT_CHECK_SECURITY,array($this,'checkApiNegotiation'));
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\EventManager\ListenerAggregateInterface::detach()
+	 */
+	public function detach(EventManagerInterface $events)
+	{
+		$events->detach($this);
+		return $this;
+	}
+	
 	/**
 	 * Check if requested service is available in server edition
 	 * 

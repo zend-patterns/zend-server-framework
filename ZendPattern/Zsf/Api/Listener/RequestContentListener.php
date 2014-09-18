@@ -2,14 +2,36 @@
 namespace ZendPattern\Zsf\Api\Listener;
 
 use ZendPattern\Zsf\Api\ApiCallEvent;
+use Zend\EventManager\ListenerAggregateInterface;
+use ZendPattern\Zsf\Api\ApiCall;
+use Zend\EventManager\EventManagerInterface;
 
 /**
  * Listener in charge of complete request content 
  * @author sophpie
  *
  */
-class RequestContentListener
+class RequestContentListener implements ListenerAggregateInterface
 {
+	/**
+	 *
+	 * @param EventManagerInterface $event
+	 */
+	public function attach(EventManagerInterface $events)
+	{
+		$events->attach(ApiCall::EVENT_SET_REQUEST,array($this,'prepareBody'), -5);
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\EventManager\ListenerAggregateInterface::detach()
+	 */
+	public function detach(EventManagerInterface $events)
+	{
+		$events->detach($this);
+		return $this;
+	}
+	
 	/**
 	 * Compute request body
 	 * @param ApiServiceEvent $event

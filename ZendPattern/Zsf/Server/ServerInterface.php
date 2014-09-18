@@ -4,9 +4,30 @@ namespace ZendPattern\Zsf\Server;
 use ZendPattern\Zsf\Server\WebInterface;
 use ZendPattern\Zsf\Api\Key\KeyManager;
 use ZendPattern\Zsf\Feature\FeatureInterface;
-
+/**
+ * Describe Zend Server 
+ * 
+ * A Zend Server is understood as a unique http point of contact through URL
+ * This URL stands for a whole cluster or a single server. 
+ * @author sophpie
+ *
+ */
 interface ServerInterface
 {
+	/**
+	 * Return server name
+	 * 
+	 * @return string
+	 */
+	public function getName();
+	
+	/**
+	 * Set serve name
+	 * 
+	 * @param string $name
+	 */
+	public function setName($name);
+	
 	/**
 	 * Return Zend Server version
 	 * 

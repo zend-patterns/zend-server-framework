@@ -2,7 +2,11 @@
 namespace ZendPattern\Zsf\Server;
 
 use Zend\Uri\Http;
-
+/**
+ * Modelize the HTTP parameters of a Zend Server implementation
+ * @author sophpie
+ *
+ */
 class WebInterface
 {
 	const DEFAULT_HOST = 'http://localhost:10081';

@@ -51,8 +51,10 @@ class KeyManager
 	 */
 	public function getApiKey($keyName = null)
 	{
-		if ( ! $keyName) return $this->getAdminApiKey();
-		if ( ! isset($this->apiKeys[$keyName])) throw new Exception('Requested api doesn\'t exixsts : ' . $keyName);
+		if ( ! $keyName) {
+			return $this->getAdminApiKey();
+		}
+		if ( ! isset($this->apiKeys[$keyName])) throw new Exception('Requested api key doesn\'t exists : ' . $keyName);
 		return $this->apiKeys[$keyName];
 	}
 	

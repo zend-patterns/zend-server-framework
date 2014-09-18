@@ -5,9 +5,47 @@ use ZendPattern\Zsf\Api\ApiCallEvent;
 use ZendPattern\Zsf\Api\Response\ResponseXml;
 use ZendPattern\Zsf\Exception\Exception;
 use ZendPattern\Zsf\Api\Response\ResponseFile;
+use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\ListenerAggregateInterface;
+use ZendPattern\Zsf\Api\ApiCall;
 
-class ResponseListener
+class ResponseListener implements ListenerAggregateInterface
 {
+	/**
+	 * 
+	 * @param EventManagerInterface $event
+	 */
+	public function attach(EventManagerInterface $events)
+	{
+		$events->attach(ApiCall::EVENT_SEND_REQUEST,array($this,'errorStrategy'),0);
+		$events->attach(ApiCall::EVENT_SEND_REQUEST,array($this,'xmlResponseStrategy'),-10);
+		$events->attach(ApiCall::EVENT_SEND_REQUEST,array($this,'fileResponseStrategy'),-20);
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\EventManager\ListenerAggregateInterface::detach()
+	 */
+	public function detach(EventManagerInterface $events)
+	{
+		$events->detach($this);
+		return $this;
+	}
+	
+	/**
+	 * Manage Htt error strategy
+	 * 
+	 * @param ApiCallEvent $event
+	 */
+	public function errorStrategy(ApiCallEvent $event)
+	{
+		$response = $event->getResponse();
+		$contentType = $response->getHeaders()->get('Content-Type')->getFieldValue();
+		if ($contentType == 'text/html') {
+			throw new Exception('Api return HTML content');
+		}
+	}
+	
 	/**
 	 * Manage Xml api response
 	 *

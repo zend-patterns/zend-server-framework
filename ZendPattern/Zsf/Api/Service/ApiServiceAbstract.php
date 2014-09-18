@@ -2,6 +2,7 @@
 namespace ZendPattern\Zsf\Api\Service;
 
 use ZendPattern\Zsf\Api\ApiParameter;
+use ZendPattern\Zsf\Feature\FeatureInterface;
 /**
  * Abstract class to describe a native zend Server API service
  * @author sophpie

@@ -90,5 +90,40 @@ class Key
 	public function getCreationTime() {
 		return $this->creationTime;
 	}
+	/**
+	 * @param \ZendPattern\Zsf\Api\Key\inte $id
+	 */
+	public function setId($id) {
+		$this->id = $id;
+	}
+
+	/**
+	 * @param string $name
+	 */
+	public function setName($name) {
+		$this->name = $name;
+	}
+
+	/**
+	 * @param string $hash
+	 */
+	public function setHash($hash) {
+		$this->hash = $hash;
+	}
+
+	/**
+	 * @param string $userName
+	 */
+	public function setUserName($userName) {
+		$this->userName = $userName;
+	}
+
+	/**
+	 * @param number $creationTime
+	 */
+	public function setCreationTime($creationTime) {
+		$this->creationTime = $creationTime;
+	}
+
 
 }

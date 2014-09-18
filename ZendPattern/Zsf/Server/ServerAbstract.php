@@ -14,6 +14,14 @@ use ZendPattern\Zsf\Exception\Exception;
 abstract class ServerAbstract implements ServerInterface, RoleInterface
 {
 	/**
+	 * Server name
+	 * 
+	 * @param string
+	 * @var unknown
+	 */
+	protected $name = 'unknonw';
+	
+	/**
 	 * Web interface
 	 * 
 	 * @var WebInterface
@@ -128,7 +136,7 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	 */
 	public function hasFeature($featureName) 
 	{
-		return $this->getFeatureSet()->hasFeature($name);
+		return $this->getFeatureSet()->hasFeature($featureName);
 	}
 	
 	/**
@@ -136,6 +144,7 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	 * @see \ZendPattern\Zsf\Server\ServerInterface::getWebInterface()
 	 */
 	public function getWebInterface() {
+		if ( ! $this->webInterface) $this->webInterface = new WebInterface();
 		return $this->webInterface;
 	}
 
@@ -202,6 +211,24 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	{
 		$roleId = 'ZendServer-' . $this->getVersion() . '-' .$this->getEdition();
 		return $roleId;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \ZendPattern\Zsf\Server\ServerInterface::getName()
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \ZendPattern\Zsf\Server\ServerInterface::setName()
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
 	}
 
 }

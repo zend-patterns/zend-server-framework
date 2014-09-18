@@ -15,7 +15,8 @@ use ZendPattern\Zsf\Api\Listener\ResponseListener;
 use ZendPattern\Zsf\Exception\Exception;
 use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use Zend\Stdlib\Parameters;
-							
+use ZendPattern\Zsf\Api\Listener\ResponseModelListener;
+								
 /**
  * Feature that allows to call a Zend Server API service
  */
@@ -24,6 +25,7 @@ use Zend\Stdlib\Parameters;
 	const EVENT_CHECK_SECURITY = 'check_security';
 	const EVENT_SET_REQUEST = 'set_request';
 	const EVENT_SEND_REQUEST = 'send_request';
+	const EVENT_RESPONSE = 'response';
 	
 	/**
 	 * Event manager
@@ -80,6 +82,23 @@ use Zend\Stdlib\Parameters;
 	public function __construct()
 	{
 		$this->setMinimalZSVersion('5.1.0');
+		$this->getServiceManager()
+			->setFactory(
+					'xmlModelGenerator',
+					'ZendPattern\Zsf\Api\XmlResponseModelMapperFactory'
+		);
+		$responseModelListener = new ResponseModelListener();
+		$responseModelListener->attach($this->getEventManager());
+		$responseListener = new ResponseListener();
+		$responseListener->attach($this->getEventManager());
+		$securityListener = new SecurityListener();
+		$securityListener->attach($this->getEventManager());
+		$requestListener = new PrepareRequestListener();
+		$requestListener->attach($this->getEventManager());
+		$requestContentListener = new RequestContentListener();
+		$requestContentListener->attach($this->getEventManager());
+		$headersListener = new HeadersListener();
+		$headersListener->attach($this->getEventManager());
 	}
 	
 	/**
@@ -100,28 +119,12 @@ use Zend\Stdlib\Parameters;
 		$event->setApiService($apiService);
 		//Check service availability
 		$event->setName(self::EVENT_CHECK_SECURITY);
-		$securityListener = new SecurityListener();
-		$this->getEventManager()->attach(self::EVENT_CHECK_SECURITY,array($securityListener,'checkServerEdition'));
-		$this->getEventManager()->attach(self::EVENT_CHECK_SECURITY,array($securityListener,'checkApiVersion'));
-		$this->getEventManager()->attach(self::EVENT_CHECK_SECURITY,array($securityListener,'checkApiNegotiation'));
 		$securityChainResult = $this->getEventManager()->trigger($event,function($v){return ($v === false);});
 		if ($securityChainResult->stopped()) throw new Exception('Security checks unsatisfied');
 		//Manage request
 		if (isset($args[1])) $this->setParameters($args[1]);
 		if (isset($args[2])) $this->setApiKeyName($args[2]);
 		if (isset($args[3])) $this->setHttpClient($args[3]);
-		$requestListener = new PrepareRequestListener();
-		$this->getEventManager()->attach(self::EVENT_SET_REQUEST,array($requestListener,'createRequest'),10);
-		$this->getEventManager()->attach(self::EVENT_SET_REQUEST,array($requestListener,'setGetParameters'));
-		$this->getEventManager()->attach(self::EVENT_SET_REQUEST,array($requestListener,'setPostParameters'));
-		$this->getEventManager()->attach(self::EVENT_SET_REQUEST,array($requestListener,'setFileParameters'));
-		$requestContentListener = new RequestContentListener();
-		$headersListener = new HeadersListener();
-		$responseListener = new ResponseListener();
-		$this->getEventManager()->attach(self::EVENT_SET_REQUEST,array($requestContentListener,'prepareBody'), -5);
-		$this->getEventManager()->attach(self::EVENT_SET_REQUEST,array($headersListener,'computeHeaders'), -10);
-		$this->getEventManager()->attach(self::EVENT_SEND_REQUEST,array($responseListener,'xmlResponseStrategy'));
-		$this->getEventManager()->attach(self::EVENT_SEND_REQUEST,array($responseListener,'fileResponseStrategy'));
 		$event->setName(self::EVENT_SET_REQUEST);
 		$this->getEventManager()->trigger($event);
 		$request = $this->getEvent()->getRequest();
@@ -132,6 +135,8 @@ use Zend\Stdlib\Parameters;
 		$event->setName(self::EVENT_SEND_REQUEST);
 		$event->setResponse($response);
 		$this->getEventManager()->trigger($event,function($e){return $e;});
+		$event->setName(self::EVENT_RESPONSE);
+		$this->getEventManager()->trigger($event);
 		$response = $this->getEvent()->getResponse();
 		return $response;
 	}
