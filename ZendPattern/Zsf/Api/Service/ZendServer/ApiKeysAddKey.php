@@ -6,7 +6,7 @@ use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
 /**
  * Add a WebAPI Key.
-
+ *
  * Version: 1.3
  * Required Permissions: Read-only
  * HTTP method: POST

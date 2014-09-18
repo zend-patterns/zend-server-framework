@@ -18,7 +18,7 @@ class XmlResponseModelMapperFactory implements FactoryInterface
 	{
 		$config = include __DIR__ . '/config/xmlmapper.config.php';
 		$mapper = new XmlResponseModelMapper();
-		foreach ($config as $markup => $array){
+		foreach ($config as $xmlMarkup => $array){
 			$mapper->addMapp($xmlMarkup,$array['model'], $array['hydrator']);
 		}
 		return $mapper;

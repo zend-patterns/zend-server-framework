@@ -12,7 +12,7 @@ class XmlResponseModelMapper
 	 * Xml markup to model mapping
 	 * @var array
 	 */
-	private $map;
+	private $map = array();
 	
 	/**
 	 * @return the $map
@@ -31,8 +31,8 @@ class XmlResponseModelMapper
 	public function addMapp($xmlMarkup,$modelClassName, $hydratorClassName)
 	{
 		$xmlMarkup = strtolower(trim($xmlMarkup,'<>'));
-		if ( ! class_exists($modelClassName,true)) return false;
-		if ( ! class_exists($hydratorClass,true)) return false;
+		//if ( ! class_exists($modelClassName,true)) return false;
+		//if ( ! class_exists($hydratorClassName,true)) return false;
 		$this->map[$xmlMarkup] = array(
 				'model' => $modelClassName,
 				'hydrator' => $hydratorClassName,
@@ -48,17 +48,16 @@ class XmlResponseModelMapper
 	 */
 	public function getModel(ResponseXml $response)
 	{
-		
-		$xmlData = $response->getXmlContent()->xpath('responseData');
+		$xmlData = $response->getXmlContent()->responseData;
 		$firstMarkup = current($xmlData->children());
-		$markup = $firstMarup->getName();
-		$xmlMarkup = strtolower(trim($xmlMarkup,'<>'));
+		$markup = $firstMarkup->getName();
+		$xmlMarkup = strtolower(trim($markup,'<>'));
 		if ( ! array_key_exists($xmlMarkup, $this->map)) return false;
 		$className = $this->map[$xmlMarkup]['model'];
 		$object  = new $className();
 		$hydratorClass = $this->map[$xmlMarkup]['hydrator'];
 		$hydrator = new $hydratorClass();
-		$object = $hydrator->hydrate($object,$xmlElement);
+		$object = $hydrator->hydrate($object,$firstMarkup);
 		return $object;
 	}
 }

@@ -112,10 +112,10 @@ use Zend\Http\Client\Adapter\Curl;
 	 * (non-PHPdoc)
 	 * @see \ZendPattern\Zsf\Feature\FeatureAbstract::__invoke()
 	 * 
-	 * @param string api service name
-	 * @param array api parameters
-	 * @param string api key name
-	 * @param Client HTTP client
+	 * @param string  : api service name
+	 * @param array   : api parameters
+	 * @param string  : api key name
+	 * @param Client  : HTTP client
 	 */
 	public function __invoke($args)
 	{

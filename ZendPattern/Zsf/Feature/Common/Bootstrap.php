@@ -44,7 +44,6 @@ class Bootstrap extends FeatureAbstract
 		if ( ! isset($args[0]['acceptEula'])) $args[0]['acceptEula'] = 1;
 		$server = $this->getServer();
 		$bootstrapResponse = $server->apiCall('bootstrapSingleServer', $args[0]);
-		$bootstrap = $bootstrapResponse->getObject();
 	}
 }
 
