@@ -1,6 +1,7 @@
 <?php
+use ZendPattern\Zsf\Feature\FeatureSet;
 return array(
-	'Zsf\featureSet\Config' => array(
+	FeatureSet::CONFIG_KEY => array(
 		'invokables' => array(
 			'apiCall' => 'ZendPattern\Zsf\Api\ApiCall',
 			//'featureCallDispatcher' => 'ZendPattern\Zsf\Feature\Common\EventDispatcher\FeatureCallDispatcher',

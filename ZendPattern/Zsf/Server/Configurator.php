@@ -14,6 +14,8 @@ use Zend\Uri\Http;
  */
 class Configurator
 {
+	const SERVICE_KEY = 'Zsf\ZendServerConfigurator';
+	
 	/**
 	 * Configure server
 	 * 

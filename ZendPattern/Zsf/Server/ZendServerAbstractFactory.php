@@ -8,7 +8,6 @@ use ZendPattern\Zsf\Feature\FeatureSet;
 class ZendServerAbstractFactory implements AbstractFactoryInterface
 {
     const ZEND_SERVERS_CONFIG_KEY = 'zend_servers';
-    const ZEND_SERVER_CONFIGURATOR_KEY = 'Zsf\ZendServerConfigurator';
     
     /**
      * (non-PHPdoc)
@@ -32,10 +31,10 @@ class ZendServerAbstractFactory implements AbstractFactoryInterface
     {
     	$config = $serviceLocator->get('config');
     	$serverConfig = $config[self::ZEND_SERVERS_CONFIG_KEY][$name];
-    	$serverConfigurator = $serviceLocator->get(self::ZEND_SERVER_CONFIGURATOR_KEY);
+    	$serverConfigurator = $serviceLocator->get(Configurator::SERVICE_KEY);
     	$server = new ZendServer();
     	$serverConfigurator->configure($server,$serverConfig);
-    	$server->setFeatureSet($serviceLocator->get(FeatureSet::FEATURE_SET_KEY));
+    	$server->setFeatureSet($serviceLocator->get(FeatureSet::SERVICE_KEY));
     	return $server;
     }
 }

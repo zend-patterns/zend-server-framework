@@ -9,8 +9,8 @@ class FeatureSet extends ServiceManager
     /**
      * Service manager config key for feature set
      */
-    const FEATURE_SET_GONFIG_KEY = 'Zsf\featureSet\Config';
-    const FEATURE_SET_KEY = 'Zsf\featureSet';
+    const CONFIG_KEY = 'Zsf\featureSet\Config';
+    const SERVICE_KEY = 'Zsf\featureSet';
     
 	/**
 	 * ZendServer

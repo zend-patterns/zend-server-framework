@@ -19,7 +19,7 @@ class FeatureSetFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
     	$config = $serviceLocator->get('config');
-    	$featureSetConfig = $config[FeatureSet::FEATURE_SET_GONFIG_KEY];
+    	$featureSetConfig = $config[FeatureSet::CONFIG_KEY];
     	$featureSet = new FeatureSet(new Config($featureSetConfig));
     	return $featureSet;
     }

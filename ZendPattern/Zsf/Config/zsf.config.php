@@ -1,11 +1,19 @@
 <?php
+use ZendPattern\Zsf\Server\ZendServerManager;
+use ZendPattern\Zsf\Feature\FeatureSet;
+use ZendPattern\Zsf\Server\Configurator;
 return array(
 	'service_manager' => array(
+		'factories' => array(
+			ZendServerManager::SERVICE_KEY => 'ZendPattern\Zsf\Server\ZendServerManagerFactory',
+		),
+	),
+	ZendServerManager::CONFIG_KEY => array(
 		'invokables' => array(
-			'Zsf\ZendServerConfigurator' => 'ZendPattern\Zsf\Server\Configurator',
+			Configurator::SERVICE_KEY => 'ZendPattern\Zsf\Server\Configurator',
 		),
 	    'factories' => array(
-		    'Zsf\FeatureSet' => 'ZendPattern\Zsf\Feature\FeatureSetFactory',
+		    FeatureSet::SERVICE_KEY => 'ZendPattern\Zsf\Feature\FeatureSetFactory',
 	    ),
 	    'abstract_factories' => array(
 	    	'ZendPattern\Zsf\Server\ZendServerAbstractFactory',
