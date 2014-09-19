@@ -1,7 +1,7 @@
 <?php
-namespace ZendPattern\Zsf\Configuration\PhpExtension;
+namespace ZendPattern\Zsf\Configuration;
 
-class PhpExtensionCollection
+class ExtensionCollection
 {
 	/**
 	 * Set of extensions
@@ -13,7 +13,7 @@ class PhpExtensionCollection
 	 * Add an extension
 	 * @param PhpExtension $extension
 	 */
-	public function addExtension(PhpExtension $extension)
+	public function addExtension(Extension $extension)
 	{
 		array_push($this->extensions, $extension);
 	}

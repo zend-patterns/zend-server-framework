@@ -38,14 +38,14 @@ class Configurator
 				$server->setKeyManager($keyManager);
 			}
 		}
-		if (isset($configuration['features'])) {
+		/*if (isset($configuration['features'])) {
 			if (is_array($configuration['features'])) {
 				foreach ($configuration['features'] as $featureClass){
 					$feature = new $featureClass();
 					$server->addFeature($feature);
 				}
 			}
-		}
+		}*/
 		return $server;
 	}
 	

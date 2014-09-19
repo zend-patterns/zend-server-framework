@@ -1,12 +1,17 @@
 <?php
-namespace ZendPattern\Zsf\Configuration\PhpExtension;
+namespace ZendPattern\Zsf\Configuration;
 
-use Zend\Db\Sql\Ddl\Column\Boolean;
-class PhpExtension
+/**
+ * Extension model
+ * @author sophpie
+ *
+ */
+class Extension
 {
 	const EXTENSION_TYPE_PHP = 'php';
 	
 	const EXTENSION_STATUS_OFF = 'off';
+	const EXTENSION_STATUS_LOADED = 'loaded';
 	
 	/**
 	 * Name
@@ -95,7 +100,7 @@ class PhpExtension
 	 * @return the $status
 	 */
 	public function getStatus() {
-		return $this->status;
+		return constant('self::EXTENSION_STATUS_' . strtoupper($this->status));
 	}
 
 	/**
@@ -172,9 +177,10 @@ class PhpExtension
 	 * @param \ZendPattern\Zsf\Configuration\PhpExtension\unknown $status
 	 */
 	public function setStatus($status) {
-		$this->status = $status;
+		$status = strtoupper($status);
+		$this->status = constant('self::EXTENSION_STATUS_' . $status);
 	}
-
+	
 	/**
 	 * @param boolean $loaded
 	 */
@@ -223,6 +229,4 @@ class PhpExtension
 	public function setMessageList($messageList) {
 		$this->messageList = $messageList;
 	}
-
-	
 }

@@ -174,6 +174,7 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	{
 		if ($this->featureSet->hasFeature($method)) {
 			$feature = $this->featureSet->get($method);
+			$feature->setServer($this);
 			if ($this->hasFeature('featureCallDispatcher')) $this->featureCallDispatcher()->triggerPreCall($method, $args);
 			$result = $feature($args);
 			if ($this->hasFeature('featureCallDispatcher')) $this->featureCallDispatcher()->triggerPostCall($result);
@@ -192,6 +193,7 @@ abstract class ServerAbstract implements ServerInterface, RoleInterface
 	 * @see \ZendPattern\Zsf\Server\ServerInterface::getKeyManager()
 	 */
 	public function getKeyManager() {
+	    if ( ! $this->keyManager) $this->keyManager = new KeyManager();
 		return $this->keyManager;
 	}
 

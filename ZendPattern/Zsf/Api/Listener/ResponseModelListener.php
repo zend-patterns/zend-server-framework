@@ -50,6 +50,9 @@ class ResponseModelListener implements ListenerAggregateInterface
 	public function hydrateFromXmlResponse(ApiCallEvent $event)
 	{
 		$response = $event->getResponse();
+		
+		var_dump($response->getInnerResponse()->getBody());
+		
 		if ( ! $response instanceof ResponseXml) return false;
 		$sm = $event->getApiCall()->getServiceManager();
 		$modelGenerator = $sm->get('xmlModelGenerator');

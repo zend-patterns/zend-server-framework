@@ -4,6 +4,7 @@ namespace ZendPattern\Zsf\Server;
 use ZendPattern\Zsf\Feature\FeatureSet;
 use ZendPattern\Zsf\Api\Key\KeyManager;
 use ZendPattern\Zsf\Server\WebInterface;
+use Zend\ServiceManager\Config;
 /**
  * Zend Server implementation
  * 
@@ -12,17 +13,6 @@ use ZendPattern\Zsf\Server\WebInterface;
  */
 class ZendServer extends ServerAbstract
 {
-	/**
-	 * Constructor
-	 * 
-	 */
-	public function __construct()
-	{
-		$this->setKeyManager(new KeyManager());
-		$this->setFeatureSet(new FeatureSet());
-		$this->setWebInterface(new WebInterface());
-	}
-	
 	/**
 	 * (non-PHPdoc)
 	 * @see \ZendPattern\ZSWebAPI2\Server\ServerAbstract::checkEditionValidity()

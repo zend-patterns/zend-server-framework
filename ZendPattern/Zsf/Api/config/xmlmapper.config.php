@@ -1,11 +1,11 @@
 <?php
 return array(
 		'extension' => array(
-			'model' => 'ZendPattern\Zsf\Configuration\PhpExtension\PhpExtension',
-			'hydrator' => 'ZendPattern\Zsf\Configuration\PhpExtension\XmlHydrator\PhpExtensionXmlHydrator',
+			'model'    => 'ZendPattern\Zsf\Configuration\Extension',
+			'hydrator' => 'ZendPattern\Zsf\Api\XmlHydrator\ExtensionHydrator',
 		),
 		'extensions' => array(
-			'model' => 'ZendPattern\Zsf\Configuration\PhpExtension\PhpExtensionCollection',
-			'hydrator' => 'ZendPattern\Zsf\Configuration\PhpExtension\XmlHydrator\PhpExtensionCollectionXmlHydrator',
+			'model'    => 'ZendPattern\Zsf\Configuration\ExtensionCollection',
+			'hydrator' => 'ZendPattern\Zsf\Api\XmlHydrator\ExtensionCollectionHydrator',
 		),
 );
