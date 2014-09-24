@@ -58,6 +58,7 @@ class RequestContentListener implements ListenerAggregateInterface
 	 */
 	protected function getMultipartBody(ApiCallEvent $event)
 	{
+		$request = $event->getRequest();
 		$body = '';
 		$boundary = '---ZENDHTTPCLIENT-' . md5(microtime());
 		$event->setMultiPartBoundary($boundary);

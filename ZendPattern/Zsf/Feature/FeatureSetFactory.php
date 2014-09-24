@@ -21,6 +21,7 @@ class FeatureSetFactory implements FactoryInterface
     	$config = $serviceLocator->get('config');
     	$featureSetConfig = $config[FeatureSet::CONFIG_KEY];
     	$featureSet = new FeatureSet(new Config($featureSetConfig));
+    	$featureSet->addPeeringServiceManager($serviceLocator);
     	return $featureSet;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace ZendPattern\Zsf\Configuration;
+namespace ZendPattern\Zsf\Model\Configuration;
 
 /**
  * Extension model

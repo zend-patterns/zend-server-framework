@@ -7,6 +7,8 @@ use ZendPattern\Zsf\Api\ApiCall;
 use ZendPattern\Zsf\Api\ApiCallEvent;
 use ZendPattern\Zsf\Api\Response\ResponseXml;
 use ZendPattern\Zsf\Api\Response\ResponseModel;
+
+use ZendPattern\Zsf\Api\XmlMapper;
 /**
  * Listener in charge of generate response from APi as an object
  * based on Xml response
@@ -51,10 +53,9 @@ class ResponseModelListener implements ListenerAggregateInterface
 	{
 		$response = $event->getResponse();
 		if ( ! $response instanceof ResponseXml) return false;
-		$sm = $event->getApiCall()->getServiceManager();
-		$modelGenerator = $sm->get('xmlModelGenerator');
-		$object = $modelGenerator->getModel($response);
-		if ( $object === false) return false;
+		$sm = $event->getApiCall()->getServiceLocator();
+		$xmlMapper = $sm->get(XmlMapper::SERVICE_KEY);
+		$object = $xmlMapper->getModelResponse($response->getXmlContent()->responseData->children());
 		$event->setResponse($object);
 		return true;
 	}

@@ -17,6 +17,7 @@ class ZendServerManagerFactory implements FactoryInterface
 		$ZSmanagerConfig = $config[ZendServerManager::CONFIG_KEY];
 		$zendServerManager = new ZendServerManager(new Config($ZSmanagerConfig));
 		$zendServerManager->setService('config', $config);
+		$zendServerManager->addPeeringServiceManager($serviceLocator);
 		return $zendServerManager;
 	}
 }

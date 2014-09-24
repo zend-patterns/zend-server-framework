@@ -17,11 +17,13 @@ use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use Zend\Stdlib\Parameters;
 use ZendPattern\Zsf\Api\Listener\ResponseModelListener;
 use Zend\Http\Client\Adapter\Curl;
-									
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+											
 /**
  * Feature that allows to call a Zend Server API service
  */
- class ApiCall extends FeatureAbstract
+ class ApiCall extends FeatureAbstract implements ServiceLocatorAwareInterface
 {
 	const EVENT_CHECK_SECURITY = 'check_security';
 	const EVENT_SET_REQUEST = 'set_request';
@@ -89,11 +91,6 @@ use Zend\Http\Client\Adapter\Curl;
 	public function __construct()
 	{
 		$this->setMinimalZSVersion('5.1.0');
-		$this->getServiceManager()
-			->setFactory(
-					'xmlModelGenerator',
-					'ZendPattern\Zsf\Api\XmlResponseModelMapperFactory'
-		);
 		$this->headerListener = new HeadersListener();
 		$responseModelListener = new ResponseModelListener();
 		$responseListener = new ResponseListener();
@@ -124,7 +121,7 @@ use Zend\Http\Client\Adapter\Curl;
 		{
 			$this->headerListener->detachSignature($this->getEventManager());
 		}
-		$apiService = $this->getServiceManager()->get($this->getApiServiceName());
+		$apiService = $this->getServiceLocator()->get($this->getApiServiceName());
 		$event = $this->getEvent();
 		$event->setApiCall($this);
 		$event->setApiService($apiService);
@@ -211,19 +208,14 @@ use Zend\Http\Client\Adapter\Curl;
 	/**
 	 * @return the $serviceManager
 	 */
-	public function getServiceManager() {
-		if ( ! $this->serviceManager) {
-			$this->serviceManager = new ServiceManager();
-			$this->serviceManager->addAbstractFactory(new ApiServiceAbstractFactory());
-		}
-		//@todo : check if abstract factory is instanciate
+	public function getServiceLocator() {
 		return $this->serviceManager;
 	}
 
 	/**
 	 * @param \Zend\ServiceManager\ServiceManager $serviceManager
 	 */
-	public function setServiceManager($serviceManager) {
+	public function setServiceLocator(ServiceLocatorInterface $serviceManager) {
 		$this->serviceManager = $serviceManager;
 	}
 	/**
