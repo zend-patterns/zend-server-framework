@@ -81,6 +81,16 @@ class ApiParameter
 	}
 	
 	/**
+	 * Check if parameter has value
+	 * @return boolean
+	 */
+	public function hasValue()
+	{
+		if ($this->value === null) return false;
+		return true;
+	}
+	
+	/**
 	 * Check if parameter is required or not
 	 * 
 	 * @return boolean

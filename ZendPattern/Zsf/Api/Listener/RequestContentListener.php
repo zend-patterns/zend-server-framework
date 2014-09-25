@@ -47,6 +47,8 @@ class RequestContentListener implements ListenerAggregateInterface
 		if(count($request->getFiles())) $body = $this->getMultipartBody($event);
 		else $body = $this->getWwwFormUrlencodedBody($event);
 		$request->setContent($body);
+		var_dump($request->getContent());
+		die();
 		$event->setRequest($request);
 	}
 	

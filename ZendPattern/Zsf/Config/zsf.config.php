@@ -30,6 +30,7 @@ return array(
 			'collectionMarkups' => array(
 				'notifications' => 'notification',
 				'extensions' => 'extenson',
+				'jobs' => 'job',
 			),
 		),
 		'invokables' => array(
@@ -37,9 +38,16 @@ return array(
 			'hydrator::notification' => 'ZendPattern\Zsf\Api\XmlHydrator\NotificationHydrator',
 			'model::extension' => 'ZendPattern\Zsf\Model\Configuration\Extension',
 			'hydrator::extension' => 'ZendPattern\Zsf\Api\XmlHydrator\ExtensionHydrator',
+			'model::job' => 'ZendPattern\Zsf\Model\Job\Job',
+			'hydrator::job' => 'ZendPattern\Zsf\Api\XmlHydrator\JobHydrator',
+			'model::jobInfo' => 'ZendPattern\Zsf\Model\Job\JobInfo',
+			'hydrator::jobInfo' => 'ZendPattern\Zsf\Api\XmlHydrator\JobInfoHydrator',
 		),
 		'abstract_factories' => array(
 			'ZendPattern\Zsf\Api\XmlHydrator\CollectionHydratorAbstractFactory',
+		),
+		'initializers' => array(
+			'ZendPattern\Zsf\Api\XmlHydrator\XmlMapperInjector',
 		),
 	),
 );

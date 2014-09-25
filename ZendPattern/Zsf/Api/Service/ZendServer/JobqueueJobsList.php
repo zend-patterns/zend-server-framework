@@ -1,11 +1,19 @@
 <?php
 
-namespace ZendPattern\Zsf\Api\Service\ZendServer\JobQueue;
+namespace ZendPattern\Zsf\Api\Service\ZendServer;
 
-use ZendPattern\Zsf\Api\Service\ServiceAbstract;
+use ZendPattern\Zsf\Api\Service\ApiServiceAbstract;
 use ZendPattern\Zsf\Api\ApiParameter;
-
-class JobqueueJobsList extends ServiceAbstract
+/**
+ * Job Queue API actions provide external actors with ways to query and manipulate jobs and their recurring definitions.
+ *
+ * Version: 1.3
+ * Required Permissions: read-only
+ * HTTP method: GET
+ * Supported by Editions: Zend Server
+ * @author sophpie
+ */
+class JobqueueJobsList extends ApiServiceAbstract
 {
 	/**
 	 * Constructor
@@ -13,8 +21,7 @@ class JobqueueJobsList extends ServiceAbstract
 	public function __construct()
 	{
 		$this->httpMethod = self::HTTP_METHOD_GET;
-		$this->requiredParams = array();
-		$this->requiredPermission = self::PERMISSION_READ;
+		$this->apiVersion = '1.3';
 		$this->uriPath = 'jobqueueJobsList';
 		$this->addParameter(new ApiParameter('limit', ApiParameter::TYPE_INTEGER));
 		$this->addParameter(new ApiParameter('offset', ApiParameter::TYPE_INTEGER));

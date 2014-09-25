@@ -86,8 +86,14 @@ class PrepareRequestListener implements ListenerAggregateInterface
 		if ( ! $request->isPost() || count($parameters) == 0) return;
 		$post = new Parameters();
 		foreach ($parameters as $name => $param){
+			if ( ! $param->hasValue()) continue;
 			if ($param->isScalar()){
 				$post->set($name, $param->getValue());
+			}
+			if ($param->isArray()){
+				foreach ($param->getValue() as $key => $value){
+					$post->set($name.'['. $key .']', $value);
+				}
 			}
 		}
 		$request->setPost($post);

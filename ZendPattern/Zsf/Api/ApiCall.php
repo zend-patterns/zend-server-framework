@@ -230,7 +230,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 	 */
 	public function setParameters(array $parameters) {
 		
-		$apiServiceParameters = $this->getServiceManager()
+		$apiServiceParameters = $this->getServiceLocator()
 			->get($this->getApiServiceName())
 			->getParameters();
 		foreach ($parameters as $name => $value){
