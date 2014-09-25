@@ -1,7 +1,8 @@
 <?php
 namespace ZendPattern\Zsf\Model;
 
-class Collection implements \Iterator
+use Zend\Stdlib\JsonSerializable;
+class Collection implements \Iterator, JsonSerializable
 {
 	/**
 	 * Collection storage
@@ -69,5 +70,14 @@ class Collection implements \Iterator
 	public function rewind()
 	{
 		$this->index = 0;
+	}
+	
+	public function jsonSerialize()
+	{
+		$jsonArray = array();
+		foreach ($this->storage as $element){
+			array_push($jsonArray,$element->jsonSerialize());
+		}
+		return $jsonArray;
 	}
 }

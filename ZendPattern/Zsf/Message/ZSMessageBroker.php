@@ -1,21 +1,31 @@
 <?php
-namespace ZendPatter\Zsf\Message;
+namespace ZendPattern\Zsf\Message;
 
 use ZendPattern\Zsf\Server\ZendServer;
 use ZendPattern\Zsf\Server\ServerInterface;
 use ZendPattern\Zsf\Message\ZSMessage;
+use ZendPattern\Zsf\Model\Job\Job;
 /**
  * Zend job queue based message broker
  * @author sophpie
  *
  */
-class ZSMessageBrocker
+class ZSMessageBroker
 {
+	const SERVICE_KEY = 'Zsf\Message\ZSMessageBroker';
+	const CONFIG_KEY = 'Zsf\Message\ZSMessageBroker\Config';
+	
 	/**
 	 * Zend Server in charge of managing queue
 	 * @var ZendServer
 	 */
 	private $zendServer;
+	
+	/**
+	 * Root URL of Zend Farm application
+	 * @var string
+	 */
+	private $rootUrl;
 	
 	/**
 	 * Reference to subscriber zend servers
@@ -41,8 +51,18 @@ class ZSMessageBrocker
 		return true;
 	}
 	
-	public function publish(ZendServerMessage $message)
+	/**
+	 * Publish message in queue
+	 * @param ZSMessageInterface $message
+	 */
+	public function publish(ZSMessageInterface $message)
 	{
+		$messageJob =new Job();
+		$script = trim($this->getRootUrl(),'/');
+		$script.= '/zsf/messaging';
+		$messageJob->setScript($script);
+		$vars = array('message' => $message->getContent());
+		$this->zendServer->createJob($messageJob,$vars);
 	}
 	
 	/**
@@ -58,5 +78,18 @@ class ZSMessageBrocker
 	public function setZendServer($zendServer) {
 		$this->zendServer = $zendServer;
 	}
+	
+	/**
+	 * @return the $rootUrl
+	 */
+	public function getRootUrl() {
+		return $this->rootUrl;
+	}
 
+	/**
+	 * @param string $rootUrl
+	 */
+	public function setRootUrl($rootUrl) {
+		$this->rootUrl = $rootUrl;
+	}
 }

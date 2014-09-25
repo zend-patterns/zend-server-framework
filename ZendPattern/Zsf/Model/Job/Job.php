@@ -1,7 +1,9 @@
 <?php
 namespace ZendPattern\Zsf\Model\Job;
 
-class Job
+use Zend\Stdlib\JsonSerializable;
+
+class Job implements JsonSerializable
 {
 	
 	private $id;
@@ -35,6 +37,18 @@ class Job
 	private $applicationId;
 	
 	private $application;
+	
+	/**
+	 * 
+	 * @return multitype:field_type
+	 */
+	public function jsonSerialize()
+	{
+		return array(
+			'id' => $this->id,
+			'script' => $this->script,
+		);
+	}
 	
 	/**
 	 * @return the $id

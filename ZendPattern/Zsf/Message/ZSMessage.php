@@ -5,7 +5,7 @@ class ZSMessage implements ZSMessageInterface
 {
 	/**
 	 * Message content
-	 * @var mixed
+	 * @var string
 	 */
 	private $content;
 	
@@ -14,6 +14,15 @@ class ZSMessage implements ZSMessageInterface
 	 * @var ZSMessageHeader
 	 */
 	private $header;
+	
+	/**
+	 * Constructeur
+	 * @param string $content
+	 */
+	public function __construct($content)
+	{
+		$this->content = $content;
+	}
 	
 	/**
 	 * (non-PHPdoc)

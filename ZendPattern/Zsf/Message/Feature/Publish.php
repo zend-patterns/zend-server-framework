@@ -1,5 +1,5 @@
 <?php
-namespace ZendPattern\Zsf\Feature\Common;
+namespace ZendPattern\Zsf\Message\Feature;
 
 use ZendPattern\Zsf\Feature\FeatureAbstract;
 use Zend\Crypt\PublicKey\Rsa\PublicKey;

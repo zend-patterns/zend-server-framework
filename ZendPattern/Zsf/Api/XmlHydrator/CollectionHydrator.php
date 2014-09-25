@@ -74,7 +74,7 @@ class CollectionHydrator implements XmlHydratorInterface, ServiceLocatorAwareInt
 	 * (non-PHPdoc)
 	 * @see \Zend\ServiceManager\ServiceLocatorAwareInterface::setServiceLocator()
 	 */
-	public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+	public function setServiceLocator(ServiceLocatorInterface $xmlMapper)
 	{
 		$this->setXmlMapper($xmlMapper);
 	}
