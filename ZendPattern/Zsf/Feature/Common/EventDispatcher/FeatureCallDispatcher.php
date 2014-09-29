@@ -26,9 +26,7 @@ class FeatureCallDispatcher extends FeatureAbstract
 	 */
 	public function __construct()
 	{
-		$this->setDependencies(array(
-			'ZendPattern\Zsf\Feature\Common\EventDispatcher\EventDispatcher',
-		));
+		$this->setCanGenrateFeatureCallEvents(false);
 	}
 	
 	/**
@@ -52,7 +50,7 @@ class FeatureCallDispatcher extends FeatureAbstract
 		$event->setName('PRE_' . strtoupper($method));
 		$event->setCalledfeature($method);
 		$event->setFeatureCallArgs($args);
-		return $this->server->eventDispatcher()->trigger($event,$this->server, array(), function ($v){return !$v;});
+		return $this->server->eventDispatcher()->trigger($event);
 	}
 	
 	/**
@@ -63,9 +61,10 @@ class FeatureCallDispatcher extends FeatureAbstract
 	public function triggerPostCall($callResult)
 	{
 		$event = $this->getEvent();
+		$method = $event->getCalledfeature();
 		$event->setName('POST_' . strtoupper($method));
 		$event->setFeatureCallResult($callResult);
-		return $this->server->eventDispatcher()->trigger($event,$this->server, array(), function ($v){return !$v;});
+		return $this->server->eventDispatcher()->trigger($event);
 	}
 	
 	/**

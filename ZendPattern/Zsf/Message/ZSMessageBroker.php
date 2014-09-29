@@ -28,7 +28,11 @@ class ZSMessageBroker
 	private $rootUrl;
 	
 	/**
-	 * Reference to subscriber zend servers
+	 * Reference to subscriber zend servers and the channems tey subscribe to
+	 * array('<server_name>' => array(
+	 *    'zserver => <zendServer_object>,
+	 *    'channels' => <array_of_channels_name>
+	 * ))
 	 * @var array
 	 */
 	private $subscribers = array();
@@ -44,10 +48,13 @@ class ZSMessageBroker
 	 * @param ServerInterface $ZServer
 	 * @return boolean
 	 */
-	public function addSubscriber(ServerInterface &$ZServer)
+	public function addSubscriber(ServerInterface &$ZServer, $channels = array())
 	{
 		if (in_array($ZServer, $this->subscribers)) return false;
-		$this->subscribers[$ZServer->getName()] = $ZServer;
+		$this->subscribers[$ZServer->getName()] = array(
+				'zserver'  => $ZServer,
+				'channels' => $channels,
+		);
 		return true;
 	}
 	
@@ -61,10 +68,40 @@ class ZSMessageBroker
 		$script = trim($this->getRootUrl(),'/');
 		$script.= '/zsf/messaging';
 		$messageJob->setScript($script);
-		$vars = array('message' => $message->getContent());
+		$vars = array(
+				'message' => serialize($message),
+		);
 		$this->zendServer->createJob($messageJob,$vars);
 	}
 	
+	/**
+	 * Get list of servers that have subscribe to givens channels
+	 * @param array $channels
+	 * @return array
+	 */
+	protected function getSubscribersTo(array $channels)
+	{
+		$subscribers = array();
+		foreach ($this->subscribers as $serverName => $data){
+			if (count(array_intersect($data['channels'], $channels)) > 0){
+				array_push($subscribers,$serverName);
+			}
+		}
+		return $subscribers;
+	}
+	
+	/**
+	 * Dispatch the messag eto subscribers
+	 * @param ZSMessageInterface $message
+	 */
+	public function dispatch(ZSMessageInterface $message)
+	{
+		$messageChannels = $message->getHeader()->getChannels();
+		$subscribers = $this->getSubscribersTo($messageChannels);
+		foreach ($subscribers as $subscriber){
+			$subscriber->triggerListeners();
+		}
+	}
 	/**
 	 * @return the $zendServer
 	 */

@@ -5,6 +5,7 @@ use ZendPattern\Zsf\Feature\FeatureAbstract;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\Event;
 use Zend\EventManager\ListenerAggregateInterface;
+use Zend\EventManager\EventManager;
 /**
  * Implement a EventManager 
  * 
@@ -19,6 +20,14 @@ class EventDispatcher extends FeatureAbstract
 	 * @var EventManagerInterface
 	 */
 	protected $eventManager;
+	
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->setCanGenrateFeatureCallEvents(false);
+	}
 
 	/**
 	 * (non-PHPdoc)
@@ -35,7 +44,7 @@ class EventDispatcher extends FeatureAbstract
 	 * @return the $eventManager
 	 */
 	protected function getEventManager() {
-		if ( ! $this->eventManager) $this->setEventManager(new EventDispatcher());
+		if ( ! $this->eventManager) $this->setEventManager(new EventManager());
 		return $this->eventManager;
 	}
 
@@ -55,10 +64,10 @@ class EventDispatcher extends FeatureAbstract
 	 * @param unknown $argv
 	 * @param string $callback
 	 */
-	public function trigger($event, $target = null, $argv = array(), $callback = null)
+	public function trigger($event)
 	{
 		if ($event instanceof ZendServerEvent) $event->setServer($this->server);
-		return $this->getEventManager()->trigger($event, $target, $argv, $callback);
+		return $this->getEventManager()->trigger($event);
 	}
 	
 	/**

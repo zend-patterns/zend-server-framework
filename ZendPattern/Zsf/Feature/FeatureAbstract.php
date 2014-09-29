@@ -38,6 +38,12 @@ abstract class FeatureAbstract implements FeatureInterface, ResourceInterface
 	 * @var string
 	 */
 	protected $minimalZSVersion = '5.0.0';
+	
+	/**
+	 * True if feture can generate pre and post feature call events dispatching
+	 * @var boolean
+	 */
+	protected $canGenrateFeatureCallEvents = true;
 
 	/**
 	 * Empty constrcutor by default
@@ -120,4 +126,18 @@ abstract class FeatureAbstract implements FeatureInterface, ResourceInterface
 	protected function setMinimalZSVersion($minimalZSVersion) {
 		$this->minimalZSVersion = $minimalZSVersion;
 	}
+	/**
+	 * @return the $canGenrateFeatureCallEvents
+	 */
+	public function canGenrateFeatureCallEvents() {
+		return $this->canGenrateFeatureCallEvents;
+	}
+
+	/**
+	 * @param boolean $canGenrateFeatureCallEvents
+	 */
+	public function setCanGenrateFeatureCallEvents($canGenrateFeatureCallEvents) {
+		$this->canGenrateFeatureCallEvents = $canGenrateFeatureCallEvents;
+	}
+
 }

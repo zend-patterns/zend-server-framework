@@ -33,7 +33,10 @@ abstract class XmlHydratorAbstract implements XmlHydratorInterface, ServiceLocat
 			$propertyName = $xmlValue->getName();
 			$setter = 'set' . ucfirst($propertyName);
 			if ( ! method_exists($object,$setter)) continue;
-			$object->$setter((string)$xmlValue);
+			$value = (string)$xmlValue;
+			if ($value == 'true') $value = true;
+			elseif ($value == 'false') $value = false;
+			$object->$setter($value);
 		}
 		return $object;
 	}

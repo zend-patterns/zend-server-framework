@@ -6,6 +6,7 @@ use ZendPattern\Zsf\Feature\FeatureInterface;
 use ZendPattern\Zsf\Api\Key\KeyManager;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use ZendPattern\Zsf\Exception\Exception;
+use ZendPattern\Zsf\Feature\Common\EventDispatcher\FeatureCallDispatcher;
 /**
  * Zend Server or cluster instance
  * @author sophpie
@@ -166,9 +167,9 @@ class ZendServer implements ServerInterface, RoleInterface
 		if ($this->featureSet->hasFeature($method)) {
 			$feature = $this->featureSet->get($method);
 			$feature->setServer($this);
-			if ($this->hasFeature('featureCallDispatcher')) $this->featureCallDispatcher()->triggerPreCall($method, $args);
+			if ($feature->canGenrateFeatureCallEvents()) $this->featureCallDispatcher()->triggerPreCall($method, $args);
 			$result = $feature($args);
-			if ($this->hasFeature('featureCallDispatcher')) $this->featureCallDispatcher()->triggerPostCall($result);
+			if ($feature->canGenrateFeatureCallEvents()) $this->featureCallDispatcher()->triggerPostCall($result);
 			return $result;
 		}
 		else throw new Exception('Feature or method : ' .$method . ' is not defined');

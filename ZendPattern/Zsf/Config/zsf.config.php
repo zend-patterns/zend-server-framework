@@ -5,6 +5,7 @@ use ZendPattern\Zsf\Server\Configurator;
 use ZendPattern\Zsf\Api\XmlMapper;
 use ZendPattern\Zsf\Message\Controller\MessagingController;
 use ZendPattern\Zsf\Message\ZSMessageBroker;
+use ZendPattern\Zsf\Message\Subscriber\SubscriberManager;
 
 return array (
 		'controllers' => array (
@@ -46,6 +47,7 @@ return array (
 						ZendServerManager::SERVICE_KEY => 'ZendPattern\Zsf\Server\ZendServerManagerFactory',
 						XmlMapper::SERVICE_KEY => 'ZendPattern\Zsf\Api\XmlMapperFactory',
 						ZSMessageBroker::SERVICE_KEY => 'ZendPattern\Zsf\Message\ZSMessageBrokerFactory',
+						SubscriberManager::SERVICE_KEY => 'ZendPattern\Zsf\Message\Subscriber\SubscriberManagerFactory',
 				),
 				'abstractFactories' => array (
 						'ZendPattern\Zsf\Api\Service\ApiServiceAbstractFactory' 
@@ -67,19 +69,28 @@ return array (
 				'services' => array (
 						'collectionMarkups' => array (
 								'notifications' => 'notification',
-								'extensions' => 'extenson',
-								'jobs' => 'job' 
+								'extensions' => 'extension',
+								'jobs' => 'job',
+								'components' => 'component',
+								'directives' => 'directive',
+								'rules' => 'rule'
 						) 
 				),
 				'invokables' => array (
 						'model::notification' => 'ZendPattern\Zsf\Model\Status\Notification',
 						'hydrator::notification' => 'ZendPattern\Zsf\Api\XmlHydrator\NotificationHydrator',
-						'model::extension' => 'ZendPattern\Zsf\Model\Configuration\Extension',
+						'model::extension' => 'ZendPattern\Zsf\Configuration\Model\Extension',
 						'hydrator::extension' => 'ZendPattern\Zsf\Api\XmlHydrator\ExtensionHydrator',
-						'model::job' => 'ZendPattern\Zsf\Model\Job\Job',
+						'model::job' => 'ZendPattern\Zsf\JobQueue\Model\Job',
 						'hydrator::job' => 'ZendPattern\Zsf\Api\XmlHydrator\JobHydrator',
-						'model::jobInfo' => 'ZendPattern\Zsf\Model\Job\JobInfo',
-						'hydrator::jobInfo' => 'ZendPattern\Zsf\Api\XmlHydrator\JobInfoHydrator' 
+						'model::jobInfo' => 'ZendPattern\Zsf\JobQueue\Model\JobInfo',
+						'hydrator::jobInfo' => 'ZendPattern\Zsf\Api\XmlHydrator\JobInfoHydrator',
+						'model::rule' => 'ZendPattern\Zsf\JobQueue\Model\Rule',
+						'hydrator::rule' => 'ZendPattern\Zsf\Api\XmlHydrator\RuleHydrator',
+						'model::component' => 'ZendPattern\Zsf\Configuration\Model\Component',
+						'hydrator::component' => 'ZendPattern\Zsf\Api\XmlHydrator\ComponentHydrator',
+						'model::directive' => 'ZendPattern\Zsf\Configuration\Model\Directive',
+						'hydrator::directive' => 'ZendPattern\Zsf\Api\XmlHydrator\DirectiveHydrator',
 				),
 				'abstract_factories' => array (
 						'ZendPattern\Zsf\Api\XmlHydrator\CollectionHydratorAbstractFactory' 
@@ -87,5 +98,6 @@ return array (
 				'initializers' => array (
 						'ZendPattern\Zsf\Api\XmlHydrator\XmlMapperInjector' 
 				) 
-		) 
+		),
+		 
 );

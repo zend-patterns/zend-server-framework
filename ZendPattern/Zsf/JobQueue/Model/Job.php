@@ -1,5 +1,5 @@
 <?php
-namespace ZendPattern\Zsf\Model\Job;
+namespace ZendPattern\Zsf\JobQueue\Model;
 
 use Zend\Stdlib\JsonSerializable;
 

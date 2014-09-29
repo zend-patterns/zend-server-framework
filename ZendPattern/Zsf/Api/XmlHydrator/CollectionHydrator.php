@@ -32,10 +32,9 @@ class CollectionHydrator implements XmlHydratorInterface, ServiceLocatorAwareInt
 	 */
 	public function hydrate($object,\SimpleXMLElement $xmlData)
 	{
-		
 		foreach ($xmlData->children() as $name => $element)
 		{
-			if ($name != $this->getContentKey()) throw \Exception('Given XML does not contain markup');
+			if ($name != $this->getContentKey()) throw new \Exception('Given XML does not contain markup');
 			$item = $this->getXmlMapper()->getModelResponse($element);
 			$object->addElement($item);
 		}

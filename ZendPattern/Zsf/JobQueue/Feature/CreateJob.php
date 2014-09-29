@@ -26,6 +26,7 @@ class CreateJob extends FeatureAbstract
 		$url = $job->getScript();
 		$jobInfo = $this->getServer()->apiCall('jobqueueAddJob',array(
 			'url' => $url,
+			'vars' => $vars,
 			//'options' => $options,
 		));
 		return $jobInfo;

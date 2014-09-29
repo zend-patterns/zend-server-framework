@@ -7,7 +7,9 @@ return array(
 			'createJob' => 'ZendPattern\Zsf\JobQueue\Feature\CreateJob',
 			'eventDispatcher' =>'ZendPattern\Zsf\Feature\Common\EventDispatcher\EventDispatcher',
 			'bootstrap' => 'ZendPattern\Zsf\Feature\Common\Bootstrap',
-			//'featureCallDispatcher' => 'ZendPattern\Zsf\Feature\Common\EventDispatcher\FeatureCallDispatcher',
+			'eventDispacther' => 'ZendPattern\Zsf\Feature\Common\EventDispatcher\EventDispatcher',
+			'featureCallDispatcher' => 'ZendPattern\Zsf\Feature\Common\EventDispatcher\FeatureCallDispatcher',
+			'configuration' => 'ZendPattern\Zsf\Configuration\Feature\Configuration',
 			//'autoDiscover' => 'ZendPattern\Zsf\Feature\Common\Bootstrap',
 		),
 		'factories' => array(
