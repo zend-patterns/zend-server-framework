@@ -7,11 +7,11 @@ class Rule
 	
 	private $type;
 	
-	private $queueNAme;
+	private $queueName;
 	
 	private $status;
 	
-	private $priority;
+	private $priority = 'high';
 	
 	private $persistent;
 	
@@ -42,10 +42,10 @@ class Rule
 	}
 
 	/**
-	 * @return the $queueNAme
+	 * @return the $queueName
 	 */
-	public function getQueueNAme() {
-		return $this->queueNAme;
+	public function getQueueName() {
+		return $this->queueName;
 	}
 
 	/**
@@ -128,8 +128,8 @@ class Rule
 	/**
 	 * @param field_type $queueNAme
 	 */
-	public function setQueueNAme($queueNAme) {
-		$this->queueNAme = $queueNAme;
+	public function setQueueName($queueName) {
+		$this->queueName = $queueName;
 	}
 
 	/**

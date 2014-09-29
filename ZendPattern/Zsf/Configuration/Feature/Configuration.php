@@ -4,7 +4,7 @@ namespace ZendPattern\Zsf\Configuration\Feature;
 use ZendPattern\Zsf\Feature\FeatureAbstract;
 
 /**
- * This geature allow to modify, save and load configuration
+ * This feature allow to modify, save and load configuration
  * @author sophpie
  *
  */
@@ -69,7 +69,7 @@ class Configuration extends FeatureAbstract
 	 * );
 	 * @return array
 	 */
-	public function getJobRulesConfigArray()
+	protected function getJobRulesConfigArray()
 	{
 		$configRules = array();
 		$jobQueueRules = $this->getServer()->apiCall('jobqueueRulesList');
@@ -77,7 +77,6 @@ class Configuration extends FeatureAbstract
 		foreach ($jobQueueRules as $rule){
 			$configRules['jobRule'][$rule->getName()] = $rule;
 		}
-		var_dump($configRules);
 		return $configRules;
 	}
 	
@@ -96,7 +95,8 @@ class Configuration extends FeatureAbstract
 	public function update($config)
 	{
 		$this->updateExentions($config['extension']);
-		$this->updateDirectives($confif['directive']);
+		$this->updateDirectives($config['directive']);
+		$this->updateJobRules($config['jobRule']);
 	}
 	
 	/**
@@ -148,6 +148,30 @@ class Configuration extends FeatureAbstract
 		if (count($newDirectiveValues) > 0) {
 			$this->getServer()->apiCall('configurationStoreDirectives', array(
 					'directives' => $newDirectiveValues,
+			));
+		}
+	}
+	
+	/**
+	 * Update job rules 
+	 * Add or replace exiting rules
+	 * 
+	 * array(
+	 *     '<name>' => <jobRule_object>,
+	 * );
+	 * @param array $config
+	 */
+	public function updateJobRules($config)
+	{
+		foreach ($config as $name => $rule){
+			$url = $rule->getScript();
+			$options = array(
+				'name' => $rule->getName(),
+				//'priority' => $rule->getPriority(),
+			);
+			$this->getServer()->apiCall('jobqueueSaveRule', array(
+				'url' => $url,
+				'options' => $options,
 			));
 		}
 	}
