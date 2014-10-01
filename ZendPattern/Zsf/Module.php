@@ -13,8 +13,8 @@ class Module implements ConfigProviderInterface
     	$featuresConfigArray = include __DIR__ . '/Config/features.config.php';
     	$apiConfigArray = include __DIR__ . '/Config/api.versions.config.php';
     	$zsfConfigArray = include __DIR__ . '/Config/zsf.config.php';
-    	$config = array_merge($featuresConfigArray,$apiConfigArray, $zsfConfigArray);
-    	//var_dump($config);
+    	$consoleConfiArray = include __DIR__ . '/Console/Config/command.config.php';
+    	$config = array_merge($featuresConfigArray,$apiConfigArray, $zsfConfigArray,$consoleConfiArray);
     	return $config;
     }
 }
