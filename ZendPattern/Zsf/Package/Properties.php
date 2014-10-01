@@ -59,6 +59,39 @@ class Properties
 	}
 	
 	/**
+	 * Set properties form content of deployment properties file
+	 * @param string $string
+	 */
+	public function fromString($string)
+	{
+		$string = preg_replace('@[\n\t\\\]@','',$string);
+		$regExp = '(?:appdir.includes = (.*))';
+		preg_match_all('@' . $regExp . '@', $string, $matches);
+		$this->appDirIncludes = $this->setArrayFromString($matches[1][0]);
+		$regExp = '(?:scriptsdir.includes = (.*))';
+		preg_match_all('@' . $regExp . '@', $string, $matches);
+		$this->scriptsDirIncludes = $this->setArrayFromString($matches[1][0]);
+		$regExp = '(?:appdir.excludes = (.*))';
+		preg_match_all('@' . $regExp . '@', $string, $matches);
+		$this->appDirExcludes = $this->setArrayFromString($matches[1][0]);
+		$regExp = '(?:scriptsdir.excludes = (.*))';
+		preg_match_all('@' . $regExp . '@', $string, $matches);
+		$this->scriptsDirExcludes = $this->setArrayFromString($matches[1][0]);
+	}
+	
+	/**
+	 * Get an array from propoerty list
+	 * @param string $stringList
+	 * @return array
+	 */
+	protected function setArrayFromString($stringList)
+	{
+		$array = explode(',',$stringList);
+		if (count($array) == 1) return array();
+		return $array;
+	}
+	
+	/**
 	 * Return given array as a string suitable for deployment properties files
 	 * @param array $list
 	 * @return string
@@ -69,7 +102,7 @@ class Properties
 		foreach ($list as $inc){
 			$str .= $inc . ",\\\n\t\t";
 		}
-		$str  = rtrim($str,",\\\t");
+		$str = substr($str,0,strlen($str)-5) . "\n";
 		return $str;
 	}
 	
@@ -82,5 +115,14 @@ class Properties
 	{
 		$str = $this->toString();
 		return file_put_contents($filename, $str);
+	}
+	
+	/**
+	 * Add a source file
+	 * @param string $source
+	 */
+	public function addSource($source)
+	{
+		$this->appDirIncludes[] = $source;
 	}
 }

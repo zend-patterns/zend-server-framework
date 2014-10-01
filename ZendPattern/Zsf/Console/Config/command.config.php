@@ -25,7 +25,7 @@ return array (
 								),
 								'zpk_init' => array(
 										'options' => array (
-												'route' => 'zpk init <name> [--sourceDir=]',
+												'route' => 'zpk init <name> <release> [--sourceDir=]',
 												'defaults' => array (
 														'controller' => 'ZendPattern\Zsf\Console\Zpk',
 														'action' => 'init' 

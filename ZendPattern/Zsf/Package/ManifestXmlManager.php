@@ -25,11 +25,14 @@ class ManifestXmlManager
 		}
 		$version = $manifest->getVersion();
 		if ($version){
+			$xmlVersion = $xml->addChild('version');
 			if ($version->getRelease())
-				$this->setXmlProperty($xml->version, 'release', $version->getRelease());
+				$this->setXmlProperty($xmlVersion, 'release', $version->getRelease());
 			if ($version->getApi())
-				$this->setXmlProperty($xml->version, 'api', $version->getApi());
+				$this->setXmlProperty($xmlVersion, 'api', $version->getApi());
 		}
+		//echo $xml->asXML();
+		//die();
 		return $xml->saveXML($fileName);
 	}
 	
