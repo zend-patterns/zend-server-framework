@@ -9,6 +9,18 @@ namespace ZendPattern\Zsf\Package;
 class Package
 {
 	/**
+	 * Package source directory
+	 * @var string
+	 */
+	private $sourceDir;
+	
+	/**
+	 * Manifest xml manager
+	 * @var ManifestXmlManager
+	 */
+	private $ManifestXmlManager;
+	
+	/**
 	 * Deployment manifest
 	 * @var Manifest
 	 */
@@ -21,43 +33,30 @@ class Package
 	private $properties;
 	
 	/**
+	 * Constructor
+	 * @param string $sourceDir
+	 */
+	public function __construct($sourceDir)
+	{
+		$this->sourceDir = $sourceDir;
+		$this->properties = new Properties();
+		if (file_exists($this->sourceDir . '/' . Properties::DEFAULT_FILE_NAME)){
+			$propertiesString = file_get_contents($this->sourceDir . '/' . Properties::DEFAULT_FILE_NAME);
+			$this->properties->fromString($propertiesString);
+		}
+		$this->manifest = new Manifest();
+		if (file_exists($this->sourceDir . '/' . ManifestXmlManager::FILE_NAME)){
+			$this->manifest = $this->getManifestXmlManager()
+				->fromXml($this->sourceDir . '/' . ManifestXmlManager::FILE_NAME, $this->manifest);
+		}
+	}
+	
+	/**
 	 * Return package name
 	 * @return string
 	 */
 	public function getName() {
 		return $this->manifest->getName();
-	}
-	
-	/**
-	 * Returns package summary
-	 * @return string
-	 */
-	public function getSummary() {
-		return $this->manifest->getSummary();
-	}
-	
-	/**
-	 * Returns package description
-	 * @return string
-	 */
-	public function getDescription() {
-		return $this->manifest->getDescription();
-	}
-	
-	/**
-	 * Return package icon path
-	 * @return string
-	 */
-	public function getIcon() {
-		return $this->manifest->getIcon();
-	}
-	
-	/**
-	 * Returns license text file path
-	 * @return string
-	 */
-	public function getEula() {
-		return $this->manifest->getEula();
 	}
 	
 	/**
@@ -77,19 +76,11 @@ class Package
 	}
 	
 	/**
-	 * Return package docroot
+	 * Returns deployment scripts zpk directory
 	 * @return string
 	 */
-	public function getDocroot() {
-		return $this->manifest->getDocroot();
-	}
-	
-	/**
-	 * Returns health check url
-	 * @return string
-	 */
-	public function getHealthcheck() {
-		return $this->manifest->getHealthcheck();
+	public function getScriptsdir() {
+		return $this->manifest->getScriptsdir();
 	}
 	
 	/**
@@ -98,38 +89,6 @@ class Package
 	 */
 	public function setName($name) {
 		$this->manifest->setName($name);
-	}
-	
-	/**
-	 * Set summary
-	 * @param string $summary
-	 */
-	public function setSummary($summary) {
-		$this->manifest->setSummary($summary);
-	}
-	
-	/**
-	 * Set descritpion
-	 * @param string $description
-	 */
-	public function setDescription($description) {
-		$this->manifest->setDescription($description);
-	}
-	
-	/**
-	 * Set Icon
-	 * @param string $icon
-	 */
-	public function setIcon($icon) {
-		$this->manifest->setIcon($icon);
-	}
-	
-	/**
-	 * Set license
-	 * @param string $eula
-	 */
-	public function setEula($eula) {
-		$this->setEula($eula);
 	}
 	
 	/**
@@ -149,18 +108,124 @@ class Package
 	}
 	
 	/**
-	 * Set docroot
-	 * @param string $docroot
+	 * @return the $sourceDir
 	 */
-	public function setDocroot($docroot) {
-		$this->manifest->setDocroot($docroot);
+	public function getSourceDir() {
+		return $this->sourceDir;
+	}
+
+	/**
+	 * @return the $ManifestXmlManager
+	 */
+	public function getManifestXmlManager() {
+		if ( ! $this->ManifestXmlManager) $this->ManifestXmlManager = new ManifestXmlManager();
+		return $this->ManifestXmlManager;
+	}
+
+	/**
+	 * @return the $manifest
+	 */
+	public function getManifest() {
+		return $this->manifest;
+	}
+
+	/**
+	 * @return the $properties
+	 */
+	public function getProperties() {
+		return $this->properties;
+	}
+
+	/**
+	 * @param string $sourceDir
+	 */
+	public function setSourceDir($sourceDir) {
+		$this->sourceDir = $sourceDir;
+	}
+
+	/**
+	 * @param \ZendPattern\Zsf\Package\ManifestXmlManager $ManifestXmlManager
+	 */
+	public function setManifestXmlManager($ManifestXmlManager) {
+		$this->ManifestXmlManager = $ManifestXmlManager;
+	}
+
+	/**
+	 * @param \ZendPattern\Zsf\Package\Manifest $manifest
+	 */
+	public function setManifest($manifest) {
+		$this->manifest = $manifest;
+	}
+
+	/**
+	 * @param \ZendPattern\Zsf\Package\Properties $properties
+	 */
+	public function setProperties($properties) {
+		$this->properties = $properties;
 	}
 	
 	/**
-	 * Set health check url
-	 * @param string $healthcheck
+	 * Copy package content to the given destination directory
+	 * @param string $destDir
 	 */
-	public function setHealthcheck($healthcheck) {
-		$this->manifest->setHealthcheck($healthcheck);
+	public function copyContentTo($destinationDir)
+	{
+		$filePicker = new FilePicker();
+		$properties = $this->getProperties();
+		$sourceList = $filePicker->pickFiles($properties->getAppDirIncludes(),$properties->getAppDirExcludes(), array());
+		$this->copyFileList($sourceList, $this->getSourceDir(), $destinationDir . '/' . $this->getAppdir());
+		$scriptList = $filePicker->pickFiles($properties->getScriptsDirIncludes(),$properties->getScriptsDirExcludes(), array());
+		$this->copyFileList($scriptList, $this->getSourceDir(), $destinationDir . '/' . $this->getScriptsdir());
+		copy($this->getSourceDir() . '/deployment.xml',$destinationDir. '/deployment.xml');
+	}
+	
+	/**
+	 * Copy a list of files and directories from a given directory to another one
+	 * @param array $list
+	 * @param string $sourceRoot
+	 * @param string $destinationDir
+	 */
+	protected function copyFileList($list,$sourceRoot,$destinationDir)
+	{
+		foreach ($list as $file){
+			$source = $sourceRoot . '/' . $file;
+			$dest =  $destinationDir . '/' . $file;
+			$destDirectory = dirname($dest);
+			if ( ! is_dir($destDirectory)) mkdir($destDirectory,0777,true);
+			if (basename($source) != FilePicker::DUMMY_FILE_NAME) copy($source,$dest);
+		}
+	}
+	
+	/**
+	 * Zip the package
+	 * @param unknown $destinationDir
+	 */
+	public function zip($destinationDir, $extension = 'zpk')
+	{
+		$zpkArch = new \ZipArchive();
+    	$zpkName = $this->getName() . '-' . $this->getVersion()->getRelease() .'.' . $extension;
+    	$zpkArch->open($destinationDir . '/' . $zpkName, \ZipArchive::CREATE);
+    	$this->addDirectoryToZip($destinationDir .'/zpk', $zpkArch);
+    	$zpkArch->close();
+	}
+	
+	/**
+	 * Add a directory to a zip archive
+	 * @param string $dir
+	 * @param \ZipArchive $zipArchive
+	 * @param string $localRoot
+	 * @return ZipArchive
+	 */
+	protected function addDirectoryToZip($dir,\ZipArchive $zipArchive,$localRoot = '')
+	{
+		foreach (scandir($dir) as $item){
+			if ($item == '.' || $item =='..') continue;
+			if (is_file($dir . '/' . $item)) $zipArchive->addFile($dir . '/' . $item,$localRoot . '/' . $item);
+			if (is_dir($dir . '/' . $item)) {
+				$zipArchive->addEmptyDir($localRoot . '/' . $item);
+				$this->addDirectoryToZip($dir . '/' . $item, $zipArchive,$localRoot . '/' . $item);
+			}
+		}
+		return $zipArchive;
 	}
 }

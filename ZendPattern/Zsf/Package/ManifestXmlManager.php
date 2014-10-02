@@ -31,8 +31,6 @@ class ManifestXmlManager
 			if ($version->getApi())
 				$this->setXmlProperty($xmlVersion, 'api', $version->getApi());
 		}
-		//echo $xml->asXML();
-		//die();
 		return $xml->saveXML($fileName);
 	}
 	
@@ -62,7 +60,7 @@ class ManifestXmlManager
 		foreach (static::$properties as $property){
 			if ($xml->$property) {
 				$setter = 'set' . ucfirst($property);
-				$manifest->$setter((string)$property);
+				$manifest->$setter((string)$xml->$property);
 			}
 		}
 		return $manifest;

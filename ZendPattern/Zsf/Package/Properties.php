@@ -64,7 +64,8 @@ class Properties
 	 */
 	public function fromString($string)
 	{
-		$string = preg_replace('@[\n\t\\\]@','',$string);
+		$string = preg_replace('@[\t\\\]@','',$string);
+		$string = preg_replace('@,\n@',',',$string);
 		$regExp = '(?:appdir.includes = (.*))';
 		preg_match_all('@' . $regExp . '@', $string, $matches);
 		$this->appDirIncludes = $this->setArrayFromString($matches[1][0]);
@@ -87,7 +88,6 @@ class Properties
 	protected function setArrayFromString($stringList)
 	{
 		$array = explode(',',$stringList);
-		if (count($array) == 1) return array();
 		return $array;
 	}
 	
@@ -125,4 +125,33 @@ class Properties
 	{
 		$this->appDirIncludes[] = $source;
 	}
+	
+	/**
+	 * @return the $appDirIncludes
+	 */
+	public function getAppDirIncludes() {
+		return $this->appDirIncludes;
+	}
+
+	/**
+	 * @return the $appDirExcludes
+	 */
+	public function getAppDirExcludes() {
+		return $this->appDirExcludes;
+	}
+
+	/**
+	 * @return the $scriptsDirIncludes
+	 */
+	public function getScriptsDirIncludes() {
+		return $this->scriptsDirIncludes;
+	}
+
+	/**
+	 * @return the $scriptsDirExcludes
+	 */
+	public function getScriptsDirExcludes() {
+		return $this->scriptsDirExcludes;
+	}
+
 }

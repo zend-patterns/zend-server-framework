@@ -60,6 +60,17 @@ class Manifest
 	private $healthcheck = '';
 	
 	/**
+	 * Archive directory where deployment scripts will be copied
+	 * @var string
+	 */
+	private $scriptsdir = 'deployment';
+	
+	public function __construct()
+	{
+		$this->version = new Version();
+	}
+	
+	/**
 	 * @return the $name
 	 */
 	public function getName() {
@@ -183,5 +194,19 @@ class Manifest
 	 */
 	public function setHealthcheck($healthcheck) {
 		$this->healthcheck = $healthcheck;
+	}
+	
+	/**
+	 * @return the $scriptsdir
+	 */
+	public function getScriptsdir() {
+		return $this->scriptsdir;
+	}
+
+	/**
+	 * @param string $scriptsdir
+	 */
+	public function setScriptsdir($scriptsdir) {
+		$this->scriptsdir = $scriptsdir;
 	}
 }

@@ -12,7 +12,7 @@ class Version
 	 * Release number
 	 * @var string
 	 */
-	private $release;
+	private $release = '0.0';
 	
 	/**
 	 * Api version

@@ -14,23 +14,23 @@ return array (
 		'console' => array (
 				'router' => array (
 						'routes' => array (
-								'zpk_pack' => array (
-										'options' => array (
-												'route' => 'zpk pack [--sourceDir=]',
-												'defaults' => array (
-														'controller' => 'ZendPattern\Zsf\Console\Zpk',
-														'action' => 'pack' 
-												) 
-										) 
-								),
 								'zpk_init' => array(
 										'options' => array (
-												'route' => 'zpk init <name> <release> [--sourceDir=]',
+												'route' => 'zpk init [--force] <name> <release> [--sourceDir=]',
 												'defaults' => array (
 														'controller' => 'ZendPattern\Zsf\Console\Zpk',
 														'action' => 'init' 
 												) 
 										) 
+								),
+								'zpk_pack' => array(
+										'options' => array (
+												'route' => 'zpk pack [--sourceDir=] [--destinationDir=]',
+												'defaults' => array (
+														'controller' => 'ZendPattern\Zsf\Console\Zpk',
+														'action' => 'pack'
+												)
+										)
 								),
 						) 
 				) 
