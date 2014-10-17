@@ -1,5 +1,5 @@
 <?php
-namespace ZendPattern\Zsf\Feature\ZendServer6;
+namespace ZendPattern\Zsf\Feature\Common;
 
 use ZendPattern\Zsf\Feature\FeatureAbstract;
 use ZendPattern\Zsf\Api\Key\Key;
@@ -12,9 +12,6 @@ class AutoDiscover extends FeatureAbstract
 	 */
 	public function __construct()
 	{
-		$this->setDependencies(array(
-				'ZendPattern\Zsf\Feature\ZendServer6\AutoDiscoverApiKeys'
-		));
 		$this->setMinimalZSVersion('5.0.0');
 	}
 	

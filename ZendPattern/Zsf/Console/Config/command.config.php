@@ -8,12 +8,22 @@ return array (
 		),
 		'controllers' => array (
 				'invokables' => array (
-						'ZendPattern\Zsf\Console\Zpk' => 'ZendPattern\Zsf\Console\Controller\ZpkController' 
+						'ZendPattern\Zsf\Console\Zpk' => 'ZendPattern\Zsf\Console\Controller\ZpkController',
+						'ZendPattern\Zsf\Console\Zshell' => 'ZendPattern\Zsf\Console\Controller\ZshellController'
 				) 
 		),
 		'console' => array (
 				'router' => array (
 						'routes' => array (
+								'zshell' => array(
+										'options' => array (
+												'route' => 'zshell <name> [--url=] [--apiPath=]',
+												'defaults' => array (
+														'controller' => 'ZendPattern\Zsf\Console\Zshell',
+														'action' => 'prompt' 
+												) 
+										) 
+								),
 								'zpk_init' => array(
 										'options' => array (
 												'route' => 'zpk init [--force] <name> <release> [--sourceDir=]',

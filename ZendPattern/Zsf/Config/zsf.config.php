@@ -91,6 +91,8 @@ return array (
 						'hydrator::component' => 'ZendPattern\Zsf\Api\XmlHydrator\ComponentHydrator',
 						'model::directive' => 'ZendPattern\Zsf\Configuration\Model\Directive',
 						'hydrator::directive' => 'ZendPattern\Zsf\Api\XmlHydrator\DirectiveHydrator',
+						'model::series' => 'ZendPattern\Zsf\Statistics\Series',
+						'hydrator::series' => 'ZendPattern\Zsf\Api\XmlHydrator\SeriesHydrator',
 				),
 				'abstract_factories' => array (
 						'ZendPattern\Zsf\Api\XmlHydrator\CollectionHydratorAbstractFactory' 

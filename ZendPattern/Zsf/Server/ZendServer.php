@@ -164,8 +164,8 @@ class ZendServer implements ServerInterface, RoleInterface
 	 */
 	public function __call($method,$args)
 	{
-		if ($this->featureSet->hasFeature($method)) {
-			$feature = $this->featureSet->get($method);
+		if ($this->getFeatureSet()->hasFeature($method)) {
+			$feature = $this->getFeatureSet()->get($method);
 			$feature->setServer($this);
 			if ($feature->canGenrateFeatureCallEvents()) $this->featureCallDispatcher()->triggerPreCall($method, $args);
 			$result = $feature($args);

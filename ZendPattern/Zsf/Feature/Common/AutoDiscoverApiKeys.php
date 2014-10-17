@@ -1,5 +1,5 @@
 <?php
-namespace ZendPattern\Zsf\Feature\ZendServer6;
+namespace ZendPattern\Zsf\Feature\Common;
 
 use ZendPattern\Zsf\Feature\FeatureAbstract;
 use ZendPattern\Zsf\Api\Key\KeyManager;
@@ -18,9 +18,6 @@ class AutoDiscoverApiKeys extends FeatureAbstract
 	 */
 	public function __construct()
 	{
-		$this->setDependencies(array(
-			'ZendPattern\Zsf\Api\ApiCall'
-		));
 		$this->setMinimalZSVersion('6.0.0');
 	}
 	

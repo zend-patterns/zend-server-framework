@@ -14,7 +14,8 @@ class Module implements ConfigProviderInterface
     	$apiConfigArray = include __DIR__ . '/Config/api.versions.config.php';
     	$zsfConfigArray = include __DIR__ . '/Config/zsf.config.php';
     	$consoleConfiArray = include __DIR__ . '/Console/Config/command.config.php';
-    	$config = array_merge($featuresConfigArray,$apiConfigArray, $zsfConfigArray,$consoleConfiArray);
+    	$jsonapiConfigArray = include __DIR__ . '/Console/Config/jsonapi.config.php';
+    	$config = array_merge($featuresConfigArray,$apiConfigArray, $zsfConfigArray,$consoleConfiArray,$jsonapiConfigArray);
     	return $config;
     }
 }

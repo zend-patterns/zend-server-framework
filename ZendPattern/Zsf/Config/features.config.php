@@ -10,7 +10,8 @@ return array(
 			'eventDispacther' => 'ZendPattern\Zsf\Feature\Common\EventDispatcher\EventDispatcher',
 			'featureCallDispatcher' => 'ZendPattern\Zsf\Feature\Common\EventDispatcher\FeatureCallDispatcher',
 			'configuration' => 'ZendPattern\Zsf\Configuration\Feature\Configuration',
-			//'autoDiscover' => 'ZendPattern\Zsf\Feature\Common\Bootstrap',
+			'autoDiscover' => 'ZendPattern\Zsf\Feature\Common\AutoDiscover',
+			'autoDiscoverApiKeys' => 'ZendPattern\Zsf\Feature\Common\AutoDiscoverApiKeys', 
 		),
 		'factories' => array(
 			'apiCall' => 'ZendPattern\Zsf\Api\ApiCallFactory',
